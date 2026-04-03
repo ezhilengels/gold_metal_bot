@@ -1,0 +1,8 @@
+# Gold Bot — Python Dependencies
+# Install with: pip install -r requirements.txt
+
+yfinance>=0.2.40        # Yahoo Finance market data
+pandas>=2.0.0           # Data manipulation
+requests>=2.31.0        # HTTP requests (FRED API, NewsAPI)
+python-dateutil>=2.8.2  # Date utilities
+pytz>=2024.1            # Timezone support
