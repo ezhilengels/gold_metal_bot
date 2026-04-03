@@ -1,0 +1,68 @@
+2026-04-03 14:23:13,527 [SIGNAL02] ============================================================
+2026-04-03 14:23:13,527 [SIGNAL02] SIGNAL 02 — MACRO TRIGGER — START
+2026-04-03 14:23:13,527 [SIGNAL02] ============================================================
+2026-04-03 14:23:13,527 [SIGNAL02] Evaluating Factor 1: DXY...
+2026-04-03 14:23:13,527 [SIGNAL02] Fetching DX-Y.NYB for last 12 days...
+2026-04-03 14:23:15,258 [SIGNAL02] Fetched 11 rows for DX-Y.NYB. Latest: 2026-04-03
+2026-04-03 14:23:15,259 [SIGNAL02] F1-DXY ➡️  DXY FLAT -0.17% over 5 days (DXY=99.980). No directional pressure.
+2026-04-03 14:23:15,259 [SIGNAL02] Evaluating Factor 2: Fed Stance...
+2026-04-03 14:23:15,259 [SIGNAL02] Fetching FRED series: FEDFUNDS
+2026-04-03 14:23:15,840 [SIGNAL02] FRED FEDFUNDS: 9 observations. Latest: 2026-03-01 = 3.64
+2026-04-03 14:23:15,840 [SIGNAL02] Fed rate now=3.64%, 3m_ago=3.72%, trend=PAUSED
+2026-04-03 14:23:15,840 [SIGNAL02] Fetching news: 10 keywords, last 14 days
+2026-04-03 14:23:16,330 [SIGNAL02] NewsAPI returned 98 articles
+2026-04-03 14:23:16,332 [SIGNAL02] Fed news: dovish=10, hawkish=5, sentiment=DOVISH
+2026-04-03 14:23:16,332 [SIGNAL02] F2-FED ✅ FED STRONGLY DOVISH — Rate PAUSED (now=3.64%) AND news dovish (10 articles). BULLISH FOR GOLD.
+2026-04-03 14:23:16,332 [SIGNAL02] Evaluating Factor 3: CPI Inflation...
+2026-04-03 14:23:16,332 [SIGNAL02] Fetching FRED series: CPIAUCSL
+2026-04-03 14:23:16,755 [SIGNAL02] FRED CPIAUCSL: 4 observations. Latest: 2026-02-01 = 327.46
+2026-04-03 14:23:16,756 [SIGNAL02] F3-CPI ✅ INFLATION RISING — CPI +0.267% MoM (CPI=327.460) ⚠️ DATA IS 61 DAYS OLD (CPI is monthly). BULLISH FOR GOLD.
+2026-04-03 14:23:16,756 [SIGNAL02] Evaluating Factor 4: Geopolitical Tension...
+2026-04-03 14:23:16,756 [SIGNAL02] Fetching news: 14 keywords, last 2 days
+2026-04-03 14:23:17,480 [SIGNAL02] NewsAPI returned 88 articles
+2026-04-03 14:23:17,481 [SIGNAL02] F4-GEO ✅ GEOPOLITICAL TENSION HIGH — score=74 (high_severity=34, medium=6). SAFE-HAVEN GOLD DEMAND. Top: "Oil rallies, stocks tumble as Trump says US to hammer Iran further"
+2026-04-03 14:23:17,481 [SIGNAL02] Evaluating Factor 5: INR/USD Rate...
+2026-04-03 14:23:17,481 [SIGNAL02] Fetching USDINR=X for last 12 days...
+2026-04-03 14:23:17,964 [SIGNAL02] Fetched 12 rows for USDINR=X. Latest: 2026-04-03
+2026-04-03 14:23:17,964 [SIGNAL02] F5-INR ❌ INR STRENGTHENING — USD/INR fell -1.756% over 5 days (now ₹92.6530). Reduces Indian gold ETF gains.
+2026-04-03 14:23:17,964 [SIGNAL02] Fetching EOD price for GOLDBEES.NS...
+2026-04-03 14:23:17,964 [SIGNAL02] Fetching GOLDBEES.NS for last 3 days...
+2026-04-03 14:23:18,460 [SIGNAL02] Fetched 3 rows for GOLDBEES.NS. Latest: 2026-04-02
+2026-04-03 14:23:18,461 [SIGNAL02] GOLDBEES.NS latest close: ₹120.58000183105469
+2026-04-03 14:23:18,461 [SIGNAL02] Generating final verdict...
+2026-04-03 14:23:18,462 [SIGNAL02] SIGNAL 02 VERDICT: STRONG BUY | Confidence: HIGH
+2026-04-03 14:23:18,462 [SIGNAL02] SIGNAL 02 — MACRO TRIGGER — END
+2026-04-03 14:23:42,937 [SIGNAL02] ============================================================
+2026-04-03 14:23:42,937 [SIGNAL02] SIGNAL 02 — MACRO TRIGGER — START
+2026-04-03 14:23:42,937 [SIGNAL02] ============================================================
+2026-04-03 14:23:42,937 [SIGNAL02] Evaluating Factor 1: DXY...
+2026-04-03 14:23:42,937 [SIGNAL02] Fetching DX-Y.NYB for last 12 days...
+2026-04-03 14:23:44,480 [SIGNAL02] Fetched 11 rows for DX-Y.NYB. Latest: 2026-04-03
+2026-04-03 14:23:44,480 [SIGNAL02] F1-DXY ➡️  DXY FLAT -0.17% over 5 days (DXY=99.978). No directional pressure.
+2026-04-03 14:23:44,480 [SIGNAL02] Evaluating Factor 2: Fed Stance...
+2026-04-03 14:23:44,480 [SIGNAL02] Fetching FRED series: FEDFUNDS
+2026-04-03 14:23:44,969 [SIGNAL02] FRED FEDFUNDS: 9 observations. Latest: 2026-03-01 = 3.64
+2026-04-03 14:23:44,969 [SIGNAL02] Fed rate now=3.64%, 3m_ago=3.72%, trend=PAUSED
+2026-04-03 14:23:44,970 [SIGNAL02] Fetching news: 10 keywords, last 14 days
+2026-04-03 14:23:46,113 [SIGNAL02] NewsAPI returned 98 articles
+2026-04-03 14:23:46,114 [SIGNAL02] Fed news: dovish=10, hawkish=5, sentiment=DOVISH
+2026-04-03 14:23:46,114 [SIGNAL02] F2-FED ✅ FED STRONGLY DOVISH — Rate PAUSED (now=3.64%) AND news dovish (10 articles). BULLISH FOR GOLD.
+2026-04-03 14:23:46,115 [SIGNAL02] Evaluating Factor 3: CPI Inflation...
+2026-04-03 14:23:46,115 [SIGNAL02] Fetching FRED series: CPIAUCSL
+2026-04-03 14:23:46,509 [SIGNAL02] FRED CPIAUCSL: 4 observations. Latest: 2026-02-01 = 327.46
+2026-04-03 14:23:46,509 [SIGNAL02] F3-CPI ✅ INFLATION RISING — CPI +0.267% MoM (CPI=327.460) ⚠️ DATA IS 61 DAYS OLD (CPI is monthly). BULLISH FOR GOLD.
+2026-04-03 14:23:46,510 [SIGNAL02] Evaluating Factor 4: Geopolitical Tension...
+2026-04-03 14:23:46,510 [SIGNAL02] Fetching news: 14 keywords, last 2 days
+2026-04-03 14:23:46,975 [SIGNAL02] NewsAPI returned 88 articles
+2026-04-03 14:23:46,977 [SIGNAL02] F4-GEO ✅ GEOPOLITICAL TENSION HIGH — score=74 (high_severity=34, medium=6). SAFE-HAVEN GOLD DEMAND. Top: "Iran warns US, Israel against attempting ground operations in new threat to 'enemies'"
+2026-04-03 14:23:46,977 [SIGNAL02] Evaluating Factor 5: INR/USD Rate...
+2026-04-03 14:23:46,977 [SIGNAL02] Fetching USDINR=X for last 12 days...
+2026-04-03 14:23:47,221 [SIGNAL02] Fetched 12 rows for USDINR=X. Latest: 2026-04-03
+2026-04-03 14:23:47,221 [SIGNAL02] F5-INR ❌ INR STRENGTHENING — USD/INR fell -1.756% over 5 days (now ₹92.6530). Reduces Indian gold ETF gains.
+2026-04-03 14:23:47,221 [SIGNAL02] Fetching EOD price for GOLDBEES.NS...
+2026-04-03 14:23:47,221 [SIGNAL02] Fetching GOLDBEES.NS for last 3 days...
+2026-04-03 14:23:47,487 [SIGNAL02] Fetched 3 rows for GOLDBEES.NS. Latest: 2026-04-02
+2026-04-03 14:23:47,487 [SIGNAL02] GOLDBEES.NS latest close: ₹120.58000183105469
+2026-04-03 14:23:47,487 [SIGNAL02] Generating final verdict...
+2026-04-03 14:23:47,487 [SIGNAL02] SIGNAL 02 VERDICT: STRONG BUY | Confidence: HIGH
+2026-04-03 14:23:47,487 [SIGNAL02] SIGNAL 02 — MACRO TRIGGER — END

@@ -128,7 +128,7 @@ def fetch_yahoo(symbol: str, period_days: int) -> Optional[pd.DataFrame]:
 
 # ── Helper: Fetch FRED Series ─────────────────────────────────────────────────
 
-def fetch_fred(series_id: str, months: int = 12) -> pd.Series | None:
+def fetch_fred(series_id: str, months: int = 12) -> Optional[pd.Series]:
     """
     Fetch a FRED data series as a pandas Series.
     Returns None if fetch fails or API key is not configured.
@@ -193,7 +193,7 @@ def fetch_fred(series_id: str, months: int = 12) -> pd.Series | None:
 
 # ── Helper: Fetch News ────────────────────────────────────────────────────────
 
-def fetch_news(keywords: list, days_back: int = 2) -> list | None:
+def fetch_news(keywords: list, days_back: int = 2) -> Optional[list]:
     """
     Fetch news articles matching keywords via NewsAPI.
     Returns list of articles or None if fetch fails.
@@ -711,7 +711,7 @@ def generate_final_verdict(
     f3: FactorResult,
     f4: FactorResult,
     f5: FactorResult,
-    gold_etf_price: float | None
+    gold_etf_price: Optional[float]
 ) -> dict:
     """
     Combine all 5 factor results into a final macro signal verdict.
