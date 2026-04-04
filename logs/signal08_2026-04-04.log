@@ -1,0 +1,128 @@
+2026-04-04 09:36:40,030 [SIGNAL08] ============================================================
+2026-04-04 09:36:40,030 [SIGNAL08] SIGNAL 08 — FINAL VERDICT — START
+2026-04-04 09:36:40,030 [SIGNAL08] ============================================================
+2026-04-04 09:36:40,030 [SIGNAL08] Running Signal 07 (Avoid / Risk Gate)...
+2026-04-04 09:36:40,810 [SIGNAL08] ============================================================
+2026-04-04 09:36:40,810 [SIGNAL08] SIGNAL 07 — AVOID SIGNAL (RISK FILTER) — START
+2026-04-04 09:36:40,810 [SIGNAL08] ============================================================
+2026-04-04 09:36:40,810 [SIGNAL08] Running Check A1: Single-Day Move Guard...
+2026-04-04 09:36:40,810 [SIGNAL08] A1: Checking single-day price move...
+2026-04-04 09:36:42,712 [SIGNAL08] A1: GOLDBEES change = -2.261%  (₹123.37 → ₹120.58)
+2026-04-04 09:36:42,957 [SIGNAL08] A1: COMEX Gold change = -2.753%
+2026-04-04 09:36:42,957 [SIGNAL08] A1 verdict: CLEAR | A1 ✅ NORMAL MOVE — GOLDBEES -2.26% today. No chase risk.
+2026-04-04 09:36:42,958 [SIGNAL08] Running Check A2: Economic Event Calendar...
+2026-04-04 09:36:42,958 [SIGNAL08] A2: Checking economic event calendar...
+2026-04-04 09:36:42,958 [SIGNAL08] A2 Calendar: 0 extreme in 24h, 0 high in 24h, 0 extreme in 24–48h
+2026-04-04 09:36:43,300 [SIGNAL08] A2 verdict: CLEAR | A2 ✅ CLEAR — No major US economic events in next 48 hours
+2026-04-04 09:36:43,301 [SIGNAL08] Running Check A3: Transaction Cost Check...
+2026-04-04 09:36:43,301 [SIGNAL08] A3: Checking transaction cost viability...
+2026-04-04 09:36:43,302 [SIGNAL08] A3: Target=3.0% | Total costs=0.755% | Net profit=2.245%
+2026-04-04 09:36:43,302 [SIGNAL08] A3 verdict: CLEAR | A3 ✅ VIABLE — Net 2.245% profit after 0.755% total costs
+2026-04-04 09:36:43,302 [SIGNAL08] SIGNAL 07 VERDICT: CLEAR | A1=CLEAR | A2=CLEAR | A3=CLEAR
+2026-04-04 09:36:43,302 [SIGNAL08] SIGNAL 07 — AVOID SIGNAL — END
+2026-04-04 09:36:43,303 [SIGNAL08] Running Signal 01 (Buy the Dip)...
+2026-04-04 09:36:43,305 [SIGNAL08] ============================================================
+2026-04-04 09:36:43,305 [SIGNAL08] SIGNAL 01 — BUY THE DIP — START
+2026-04-04 09:36:43,305 [SIGNAL08] ============================================================
+2026-04-04 09:36:43,305 [SIGNAL08] Fetching GOLDBEES.NS — last 35 days...
+2026-04-04 09:36:43,549 [SIGNAL08] Fetched 35 rows for GOLDBEES.NS. Latest: 2026-04-02 close=₹120.58
+2026-04-04 09:36:43,552 [SIGNAL08] Indicators: price=₹120.58, RSI=43.99, MA20=₹125.50, SwingHigh=₹128.07 (2026-03-18), PrevLow=₹123.02
+2026-04-04 09:36:43,552 [SIGNAL08] Scores: A=0.5 B=0.5 C=1.0 D=0.0 Total=2.0/4.0
+2026-04-04 09:36:43,552 [SIGNAL08] VERDICT: WATCH | Confidence: LOW | Score: 2.0
+2026-04-04 09:36:43,552 [SIGNAL08] SIGNAL 01 — BUY THE DIP — END
+2026-04-04 09:36:43,552 [SIGNAL08] Running Signal 02 (Macro Trigger)...
+2026-04-04 09:36:43,554 [SIGNAL08] ============================================================
+2026-04-04 09:36:43,554 [SIGNAL08] SIGNAL 02 — MACRO TRIGGER — START
+2026-04-04 09:36:43,554 [SIGNAL08] ============================================================
+2026-04-04 09:36:43,554 [SIGNAL08] Evaluating Factor 1: DXY...
+2026-04-04 09:36:43,554 [SIGNAL08] Fetching DX-Y.NYB for last 12 days...
+2026-04-04 09:36:43,793 [SIGNAL08] Fetched 11 rows for DX-Y.NYB. Latest: 2026-04-03
+2026-04-04 09:36:43,793 [SIGNAL08] F1-DXY ➡️  DXY FLAT 0.04% over 5 days (DXY=100.186). No directional pressure.
+2026-04-04 09:36:43,793 [SIGNAL08] Evaluating Factor 2: Fed Stance...
+2026-04-04 09:36:43,794 [SIGNAL08] Fetching FRED series: FEDFUNDS
+2026-04-04 09:36:44,578 [SIGNAL08] FRED FEDFUNDS: 9 observations. Latest: 2026-03-01 = 3.64
+2026-04-04 09:36:44,578 [SIGNAL08] Fed rate now=3.64%, 3m_ago=3.72%, trend=PAUSED
+2026-04-04 09:36:44,578 [SIGNAL08] Fetching news: 10 keywords, last 14 days
+2026-04-04 09:36:45,492 [SIGNAL08] NewsAPI returned 95 articles
+2026-04-04 09:36:45,494 [SIGNAL08] Fed news: dovish=11, hawkish=4, sentiment=DOVISH
+2026-04-04 09:36:45,494 [SIGNAL08] F2-FED ✅ FED STRONGLY DOVISH — Rate PAUSED (now=3.64%) AND news dovish (11 articles). BULLISH FOR GOLD.
+2026-04-04 09:36:45,494 [SIGNAL08] Evaluating Factor 3: CPI Inflation...
+2026-04-04 09:36:45,494 [SIGNAL08] Fetching FRED series: CPIAUCSL
+2026-04-04 09:36:45,978 [SIGNAL08] FRED CPIAUCSL: 4 observations. Latest: 2026-02-01 = 327.46
+2026-04-04 09:36:45,979 [SIGNAL08] F3-CPI ✅ INFLATION RISING — CPI +0.267% MoM (CPI=327.460) ⚠️ DATA IS 62 DAYS OLD (CPI is monthly). BULLISH FOR GOLD.
+2026-04-04 09:36:45,979 [SIGNAL08] Evaluating Factor 4: Geopolitical Tension...
+2026-04-04 09:36:45,979 [SIGNAL08] Fetching news: 14 keywords, last 2 days
+2026-04-04 09:36:46,403 [SIGNAL08] NewsAPI returned 98 articles
+2026-04-04 09:36:46,404 [SIGNAL08] F4-GEO ✅ GEOPOLITICAL TENSION HIGH — score=74 (high_severity=29, medium=16). SAFE-HAVEN GOLD DEMAND. Top: "White House set to release Trump's budget with major increase in defense spending"
+2026-04-04 09:36:46,405 [SIGNAL08] Evaluating Factor 5: INR/USD Rate...
+2026-04-04 09:36:46,405 [SIGNAL08] Fetching USDINR=X for last 12 days...
+2026-04-04 09:36:46,646 [SIGNAL08] Fetched 13 rows for USDINR=X. Latest: 2026-04-04
+2026-04-04 09:36:46,647 [SIGNAL08] F5-INR ❌ INR STRENGTHENING — USD/INR fell -2.228% over 5 days (now ₹92.6700). Reduces Indian gold ETF gains.
+2026-04-04 09:36:46,647 [SIGNAL08] Fetching EOD price for GOLDBEES.NS...
+2026-04-04 09:36:46,647 [SIGNAL08] Fetching GOLDBEES.NS for last 3 days...
+2026-04-04 09:36:46,875 [SIGNAL08] Fetched 3 rows for GOLDBEES.NS. Latest: 2026-04-02
+2026-04-04 09:36:46,876 [SIGNAL08] GOLDBEES.NS latest close: ₹120.58000183105469
+2026-04-04 09:36:46,876 [SIGNAL08] Generating final verdict...
+2026-04-04 09:36:46,876 [SIGNAL08] SIGNAL 02 VERDICT: STRONG BUY | Confidence: HIGH
+2026-04-04 09:36:46,876 [SIGNAL08] SIGNAL 02 — MACRO TRIGGER — END
+2026-04-04 09:36:46,876 [SIGNAL08] Running Signal 04 (Bollinger Bands)...
+2026-04-04 09:36:46,879 [SIGNAL08] ============================================================
+2026-04-04 09:36:46,879 [SIGNAL08] SIGNAL 04 — BOLLINGER BANDS — START
+2026-04-04 09:36:46,879 [SIGNAL08] ============================================================
+2026-04-04 09:36:46,879 [SIGNAL08] Fetching GOLDBEES.NS — last 40 days...
+2026-04-04 09:36:47,129 [SIGNAL08] Fetched 40 rows. Latest: 2026-04-02  close=₹120.58
+2026-04-04 09:36:47,129 [SIGNAL08] BB: MB=₹125.4965 | UB=₹138.6803 | LB=₹112.3127 | %B=0.3135 | BW=21.0106% | Price=₹120.58
+2026-04-04 09:36:47,130 [SIGNAL08] Market state: STRONG TREND | BB reliability: LOW
+2026-04-04 09:36:47,130 [SIGNAL08] Zone: MID_BAND | %B=0.3135
+2026-04-04 09:36:47,130 [SIGNAL08] VERDICT: WAIT | Confidence: NONE
+2026-04-04 09:36:47,130 [SIGNAL08] SIGNAL 04 — BOLLINGER BANDS — END
+2026-04-04 09:36:47,130 [SIGNAL08] Running Signal 03 (Seasonality)...
+2026-04-04 09:36:47,132 [SIGNAL08] ============================================================
+2026-04-04 09:36:47,132 [SIGNAL08] SIGNAL 03 — SEASONALITY PLAY — START
+2026-04-04 09:36:47,132 [SIGNAL08] ============================================================
+2026-04-04 09:36:47,132 [SIGNAL08] Date: 2026-04-04 | Month: April | Day: 4
+2026-04-04 09:36:47,132 [SIGNAL08] Season: AKSHAYA_TRITIYA_BUILDUP | Demand: VERY_HIGH
+2026-04-04 09:36:47,132 [SIGNAL08] Signal: BUY / BUILD | Strength: BUILDING PHASE | Score: 5/5
+2026-04-04 09:36:47,132 [SIGNAL08] Upcoming event: ⚡ UPCOMING: Akshaya Tritiya in ~16 day(s) (20 Apr 2026) — demand spike expected
+2026-04-04 09:36:47,132 [SIGNAL08] FINAL: BUY / BUILD | Score: 5/5 | Confidence: HIGH
+2026-04-04 09:36:47,132 [SIGNAL08] SIGNAL 03 — SEASONALITY PLAY — END
+2026-04-04 09:36:47,132 [SIGNAL08] Running Signal 05 (2026 Outlook)...
+2026-04-04 09:36:47,133 [SIGNAL08] ============================================================
+2026-04-04 09:36:47,133 [SIGNAL08] SIGNAL 05 — 2026 GOLD OUTLOOK — START
+2026-04-04 09:36:47,133 [SIGNAL08] ============================================================
+2026-04-04 09:36:47,133 [SIGNAL08] Fetching O1 (Geopolitical tension via NewsAPI)...
+2026-04-04 09:36:47,588 [SIGNAL08] O1: fetched 98 articles from NewsAPI (30 days)
+2026-04-04 09:36:47,589 [SIGNAL08] O1: high_articles=21, medium_articles=21, tension_score=63
+2026-04-04 09:36:47,590 [SIGNAL08] O1: available=True | score=2.0 | bias=STRONGLY BULLISH
+2026-04-04 09:36:47,590 [SIGNAL08] Fetching O2 (Central bank buying via WGC/news)...
+2026-04-04 09:36:47,940 [SIGNAL08] O2: found 6 WGC articles via NewsAPI
+2026-04-04 09:36:47,941 [SIGNAL08] O2 fetch failed: Could not parse tonne figures from WGC articles
+2026-04-04 09:36:47,942 [SIGNAL08] O2: available=False | score=0.0 | bias=UNKNOWN
+2026-04-04 09:36:47,942 [SIGNAL08] Fetching O3 (Fed rates via FRED FEDFUNDS)...
+2026-04-04 09:36:48,450 [SIGNAL08] O3: FEDFUNDS current=3.64% | 6M_ago=4.22% | 12M_ago=4.33% | 6M_change=-0.58% | 12M_change=-0.69%
+2026-04-04 09:36:48,450 [SIGNAL08] O3: available=True | score=2.0 | bias=STRONGLY BULLISH
+2026-04-04 09:36:48,451 [SIGNAL08] Fetching O4 (DXY 30-day via Yahoo Finance)...
+2026-04-04 09:36:49,150 [SIGNAL08] O4: DXY=100.186 | 30d_change=+2.44% | 10d_change=+0.54%
+2026-04-04 09:36:49,150 [SIGNAL08] O4: available=True | score=0.0 | bias=BEARISH
+2026-04-04 09:36:49,150 [SIGNAL08] Fetching O5 (NFP via FRED PAYEMS)...
+2026-04-04 09:36:49,618 [SIGNAL08] O5: PAYEMS latest=178,000 jobs | prev=-133,000 | data_date=2026-03-01 | days_old=34
+2026-04-04 09:36:49,619 [SIGNAL08] O5: available=True | score=0.5 | bias=NEUTRAL
+2026-04-04 09:36:49,619 [SIGNAL08] Calculating final 2026 outlook...
+2026-04-04 09:36:49,619 [SIGNAL08] Outlook calc: available=4/5 | score=4.5 / max_possible=7.0
+2026-04-04 09:36:49,619 [SIGNAL08] Normalized: 64.3%
+2026-04-04 09:36:49,620 [SIGNAL08] FINAL: BULLISH | Score: 4.5/7.0 | Normalized: 64.3% | Available: 4/5 | Confidence: MEDIUM
+2026-04-04 09:36:49,620 [SIGNAL08] SIGNAL 05 — 2026 GOLD OUTLOOK — END
+2026-04-04 09:36:49,620 [SIGNAL08] Running Signal 06 (Weekly Routine)...
+2026-04-04 09:36:49,623 [SIGNAL08] ============================================================
+2026-04-04 09:36:49,623 [SIGNAL08] SIGNAL 06 — WEEKLY ROUTINE — START
+2026-04-04 09:36:49,623 [SIGNAL08] ============================================================
+2026-04-04 09:36:49,623 [SIGNAL08] Day gate: Saturday (dow=5) | active=False
+2026-04-04 09:36:49,623 [SIGNAL08] Non-trading day — signal inactive
+2026-04-04 09:36:49,623 [SIGNAL08] Scores: S01=5.0 S02=22.0 S03=5.0 S04=0.0 S05=7.0 S06=0
+2026-04-04 09:36:49,624 [SIGNAL08] Raw=39.0 | S07 penalty=0.0 | Final=39.0
+2026-04-04 09:36:49,624 [SIGNAL08] Non-trading day: score capped at 20
+2026-04-04 09:36:49,624 [SIGNAL08] FINAL VERDICT: NON-TRADING DAY | Score: 20.0/80 | Confidence: NONE
+2026-04-04 09:36:49,624 [SIGNAL08] SIGNAL 08 — FINAL VERDICT — END
+2026-04-04 09:36:49,624 [SIGNAL08] Telegram dispatch: signal=NON-TRADING DAY
+2026-04-04 09:36:49,624 [SIGNAL08] Telegram: no alert sent for verdict 'NON-TRADING DAY' (silent verdict)
+2026-04-04 09:36:49,624 [SIGNAL08] Telegram alert dispatched: False

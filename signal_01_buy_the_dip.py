@@ -23,6 +23,7 @@ from datetime import datetime
 import logging
 import os
 import sys
+from typing import Optional, Union
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 
@@ -48,7 +49,7 @@ log = logging.getLogger("signal01")
 # DATA FETCH
 # =============================================================================
 
-def fetch_etf_data(symbol: str, period_days: int = 35) -> pd.DataFrame | None:
+def fetch_etf_data(symbol: str, period_days: int = 35) -> Optional[pd.DataFrame]:
     """
     Fetch daily OHLCV data for the Gold ETF.
     Requires at least 25 rows (for 20-day MA + RSI buffer).
@@ -86,7 +87,7 @@ def fetch_etf_data(symbol: str, period_days: int = 35) -> pd.DataFrame | None:
 # CALCULATIONS
 # =============================================================================
 
-def calculate_rsi(closes: pd.Series, period: int = 14) -> float | None:
+def calculate_rsi(closes: pd.Series, period: int = 14) -> Optional[float]:
     """
     Calculate RSI for the latest bar using Wilder's smoothing method.
     Returns the RSI value (0–100) or None if calculation fails.
@@ -123,7 +124,7 @@ def calculate_rsi(closes: pd.Series, period: int = 14) -> float | None:
         return None
 
 
-def calculate_sma(closes: pd.Series, period: int = 20) -> float | None:
+def calculate_sma(closes: pd.Series, period: int = 20) -> Optional[float]:
     """
     Calculate Simple Moving Average for the latest bar.
     Returns the SMA value or None if calculation fails.
@@ -141,7 +142,7 @@ def calculate_sma(closes: pd.Series, period: int = 20) -> float | None:
         return None
 
 
-def find_swing_high(highs: pd.Series, lookback: int = 10) -> tuple[float, str] | tuple[None, None]:
+def find_swing_high(highs: pd.Series, lookback: int = 10) -> Union[tuple[float, str], tuple[None, None]]:
     """
     Find the highest high in the last `lookback` bars.
     Returns (swing_high_price, date_string) or (None, None).
@@ -321,7 +322,7 @@ def generate_verdict(
     score: float,
     current_price: float,
     dip_pct: float
-) -> tuple[str, str, str | None]:
+) -> tuple[str, str, Optional[str]]:
     """
     Convert raw score into final signal, confidence, and action.
     Returns: (signal, confidence, action)

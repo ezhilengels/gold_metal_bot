@@ -26,6 +26,7 @@ from datetime import datetime
 import logging
 import os
 import sys
+from typing import Optional, Union
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 
@@ -59,7 +60,7 @@ NEAR_BAND_PCT     = 0.005   # "Near" a band = within 0.5%
 # DATA FETCH
 # =============================================================================
 
-def fetch_etf_data(symbol: str, period_days: int = 40) -> pd.DataFrame | None:
+def fetch_etf_data(symbol: str, period_days: int = 40) -> Optional[pd.DataFrame]:
     """
     Fetch daily OHLCV data for the Gold ETF from Yahoo Finance.
     Returns a clean DataFrame sorted ascending, or None on failure.
@@ -102,7 +103,7 @@ def calculate_bollinger_bands(
     closes: pd.Series,
     period: int = BB_PERIOD,
     std_mult: float = BB_STD_MULT
-) -> dict | None:
+) -> Optional[dict]:
     """
     Calculate Bollinger Bands for the latest bar.
 

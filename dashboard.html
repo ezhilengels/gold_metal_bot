@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gold Bot Dashboard — 2026-04-04</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0d1117;color:#e6edf3;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:20px}
+  a{color:#ffd740}
+
+  /* ── Layout ── */
+  .container{max-width:960px;margin:0 auto}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  /* ── Header ── */
+  .header{background:linear-gradient(135deg,#1a1f2e,#1e2a1a);border:1px solid #ffd74033;
+           border-radius:12px;padding:24px 28px;margin-bottom:20px;
+           display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-size:1.5rem;font-weight:700;color:#ffd740;letter-spacing:.5px}
+  .header-left .sub{font-size:.85rem;color:#8b949e;margin-top:4px}
+  .etf-badge{background:#ffd74022;border:1px solid #ffd74055;border-radius:8px;
+              padding:8px 16px;font-size:.9rem;color:#ffd740;font-weight:600}
+  .ts{font-size:.78rem;color:#8b949e;margin-top:4px;text-align:right}
+
+  /* ── Verdict card ── */
+  .verdict-card{background:rgba(144,164,174,0.10);border:2px solid #90a4ae44;border-radius:12px;
+                 padding:24px 28px;margin-bottom:20px;text-align:center}
+  .verdict-label{font-size:.8rem;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+  .verdict-signal{font-size:2.4rem;font-weight:800;color:#90a4ae;letter-spacing:.5px;margin-bottom:8px}
+  .verdict-conf{font-size:.9rem;color:#8b949e}
+  .verdict-action{margin-top:16px;font-size:.95rem;color:#c9d1d9;line-height:1.6;
+                   background:#ffffff08;border-radius:8px;padding:12px 16px;text-align:left}
+
+  /* ── Gauge ── */
+  .gauge-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;margin-bottom:20px}
+  .section-title{font-size:.82rem;text-transform:uppercase;letter-spacing:1px;color:#8b949e;margin-bottom:14px;font-weight:600}
+  .gauge-wrap{position:relative;text-align:center;padding:10px 0 0}
+  .gauge-arc{width:200px;height:105px;margin:0 auto;position:relative;overflow:hidden}
+  .gauge-arc svg{width:100%;height:100%}
+  .gauge-number{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+                 font-size:2rem;font-weight:800;color:#ffab40}
+  .gauge-max{font-size:.9rem;color:#8b949e}
+  .zone-bar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:16px 0 4px;gap:2px}
+  .zone-seg{height:100%;border-radius:2px;transition:opacity .2s}
+  .thresh-row{display:flex;justify-content:space-between;font-size:.72rem;color:#8b949e;text-align:center}
+  .score-summary{margin-top:16px;border-top:1px solid #30363d;padding-top:14px}
+  .score-row{display:flex;justify-content:space-between;font-size:.88rem;
+              padding:5px 0;color:#c9d1d9;border-bottom:1px solid #21262d}
+  .score-row.bold{font-weight:700;font-size:.95rem}
+
+  /* ── Signal cards ── */
+  .signals-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;margin-bottom:20px}
+  .sig-card{background:#0d1117;border:1px solid #21262d;border-radius:8px;
+             padding:12px 14px;margin-bottom:10px}
+  .sig-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .sig-code{font-size:.75rem;font-weight:700;background:#21262d;border-radius:4px;
+             padding:2px 7px;color:#8b949e;letter-spacing:.5px}
+  .sig-label{flex:1;font-size:.9rem;color:#c9d1d9}
+  .sig-pts{font-size:1.1rem;font-weight:700}
+  .sig-max{font-size:.75rem;color:#8b949e;font-weight:400}
+  .sig-bar-bg{height:5px;background:#21262d;border-radius:3px;overflow:hidden}
+  .sig-bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+
+  /* ── Trade box ── */
+  .trade-box{background:#0f1a0f;border:1px solid #00e67633;border-radius:12px;padding:20px;margin-bottom:16px}
+  .trade-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0}
+  @media(max-width:500px){.trade-grid{grid-template-columns:1fr}}
+  .trade-item{background:#ffffff08;border-radius:8px;padding:12px;text-align:center}
+  .trade-item.green{border:1px solid #00e67633}
+  .trade-item.red{border:1px solid #ff525233}
+  .trade-lbl{font-size:.75rem;color:#8b949e;margin-bottom:4px}
+  .trade-val{font-size:1.2rem;font-weight:700;color:#e6edf3}
+  .trade-item.green .trade-val{color:#00e676}
+  .trade-item.red .trade-val{color:#ff5252}
+  .trade-note{font-size:.78rem;color:#8b949e;margin-top:8px;text-align:center}
+
+  /* ── Alert / blocked ── */
+  .alert-box{background:#3d1a0011;border:1px solid #ffab4044;border-radius:10px;
+              padding:14px 16px;margin-bottom:16px;font-size:.9rem;color:#ffd740}
+  .blocked-banner{background:#ff525211;border:1px solid #ff525244;border-radius:10px;
+                   padding:16px;margin-bottom:16px;font-size:.9rem;color:#ff5252;line-height:1.6}
+
+  /* ── Guide box ── */
+  .guide-box{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;margin-bottom:16px}
+  .guide-row{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:.87rem;color:#c9d1d9}
+  .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+  /* ── Info card ── */
+  .info-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;margin-bottom:16px}
+  .info-row{display:flex;justify-content:space-between;padding:6px 0;
+             font-size:.87rem;border-bottom:1px solid #21262d;color:#c9d1d9}
+  .info-row:last-child{border-bottom:none}
+  .info-key{color:#8b949e}
+  .info-val{font-weight:600;text-align:right;max-width:60%}
+
+  /* ── Refresh btn ── */
+  .refresh-bar{text-align:center;margin:24px 0 8px}
+  .refresh-btn{background:#ffd74022;border:1px solid #ffd74055;border-radius:8px;
+                color:#ffd740;padding:10px 28px;font-size:.9rem;cursor:pointer;
+                font-weight:600;text-decoration:none;display:inline-block}
+  .refresh-btn:hover{background:#ffd74033}
+
+  /* ── Footer ── */
+  .footer{text-align:center;font-size:.78rem;color:#484f58;margin-top:24px;padding-bottom:8px}
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#0d1117}
+  ::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1>🥇 Gold Bot Dashboard</h1>
+      <div class="sub">Indian Gold ETF Trading Signal</div>
+    </div>
+    <div>
+      <div class="etf-badge">GOLDBEES.NS</div>
+      <div class="ts">Last run: 2026-04-04 09:36:40</div>
+    </div>
+  </div>
+
+  
+  
+
+  <!-- VERDICT -->
+  <div class="verdict-card">
+    <div class="verdict-label">Final Verdict</div>
+    <div class="verdict-signal">NON-TRADING DAY</div>
+    <div class="verdict-conf">Confidence: <strong style="color:#e6edf3">NONE</strong></div>
+    <div class="verdict-action">Friday / weekend — do NOT enter new positions. Hold existing positions with stop loss active.</div>
+  </div>
+
+  <!-- TRADE PARAMS -->
+  
+
+  <div class="grid-2">
+    <!-- LEFT: GAUGE + SCORE SUMMARY -->
+    <div>
+      <div class="gauge-card">
+        <div class="section-title">📈 Composite Score</div>
+        <div class="gauge-wrap">
+          <div class="gauge-arc">
+            <svg viewBox="0 0 200 105" xmlns="http://www.w3.org/2000/svg">
+              <!-- background arc -->
+              <path d="M10,100 A90,90 0 0,1 190,100" fill="none" stroke="#21262d" stroke-width="16" stroke-linecap="round"/>
+              <!-- score arc -->
+              <path d="M10,100 A90,90 0 0,1 190,100" fill="none" stroke="#ffab40" stroke-width="16"
+                    stroke-linecap="round"
+                    stroke-dasharray="70.8 283"/>
+              <!-- needle -->
+              <line x1="100" y1="100"
+                    x2="50.5"
+                    y2="50.5"
+                    stroke="#ffd740" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="100" cy="100" r="5" fill="#ffd740"/>
+            </svg>
+            <div class="gauge-number">20<span class="gauge-max">/80</span></div>
+          </div>
+        </div>
+        <div class="zone-bar"><div class="zone-seg" style="width:19%;background:#ff5252" title="No Trade"></div><div class="zone-seg" style="width:19%;background:#ffab40" title="Wait"></div><div class="zone-seg" style="width:19%;background:#ffd740" title="Watch"></div><div class="zone-seg" style="width:19%;background:#69f0ae" title="Buy"></div><div class="zone-seg" style="width:25%;background:#00e676" title="Strong Buy"></div></div>
+        
+      <div class="thresh-row">
+        <span>0</span><span>15<br><small>WAIT</small></span>
+        <span>30<br><small>WATCH</small></span>
+        <span>45<br><small>BUY</small></span>
+        <span>60<br><small>STR BUY</small></span>
+        <span>80</span>
+      </div>
+        
+      <div class="score-summary">
+        <div class="score-row"><span>Raw Score</span><span>39.0 / 80</span></div>
+        <div class="score-row"><span>S07 Penalty</span><span style="color:#ffab40">-0.0 pts</span></div>
+        <div class="score-row bold"><span>Final Score</span><span style="color:#ffab40">20.0 / 80</span></div>
+        <div class="score-row"><span>Normalized</span><span>25.0%</span></div>
+      </div>
+      </div>
+      
+      <div class="guide-box">
+        <div class="section-title">Score Guide</div>
+        <div class="guide-row"><span class="dot" style="background:#00e676"></span><span>&ge;60 — STRONG BUY</span></div>
+        <div class="guide-row"><span class="dot" style="background:#69f0ae"></span><span>&ge;45 — BUY</span></div>
+        <div class="guide-row"><span class="dot" style="background:#ffd740"></span><span>&ge;30 — WATCH</span></div>
+        <div class="guide-row"><span class="dot" style="background:#ffab40"></span><span>&ge;15 — WAIT</span></div>
+        <div class="guide-row"><span class="dot" style="background:#ff5252"></span><span>&lt;15 — DO NOT TRADE</span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SIGNAL BREAKDOWN -->
+    <div>
+      <div class="signals-card">
+        <div class="section-title">🔍 Signal Breakdown</div>
+        
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S01</span>
+            <span class="sig-label">Buy the Dip</span>
+            <span class="sig-pts" style="color:#ffab40">5<span class="sig-max">/15</span></span>
+          </div>
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:33%;background:#ffab40"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S02</span>
+            <span class="sig-label">Macro Trigger</span>
+            <span class="sig-pts" style="color:#00e676">22<span class="sig-max">/25</span></span>
+          </div>
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:88%;background:#00e676"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S03</span>
+            <span class="sig-label">Seasonality</span>
+            <span class="sig-pts" style="color:#00e676">5<span class="sig-max">/5</span></span>
+          </div>
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:100%;background:#00e676"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S04</span>
+            <span class="sig-label">Bollinger Bands</span>
+            <span class="sig-pts" style="color:#546e7a">0<span class="sig-max">/15</span></span>
+          </div>
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:0%;background:#546e7a"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S05</span>
+            <span class="sig-label">2026 Outlook</span>
+            <span class="sig-pts" style="color:#ffd740">7<span class="sig-max">/10</span></span>
+          </div>
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:70%;background:#ffd740"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S06</span>
+            <span class="sig-label">Weekly Routine</span>
+            <span class="sig-pts" style="color:#546e7a">0<span class="sig-max">/10</span></span>
+          </div>
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:0%;background:#546e7a"></div>
+          </div>
+        </div>
+        
+        <div class="sig-card" style="border-color:#546e7a33">
+          <div class="sig-header">
+            <span class="sig-code">S07</span>
+            <span class="sig-label">Risk Gate Penalty</span>
+            <span class="sig-pts" style="color:#546e7a">-0<span class="sig-max">/80</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOT INFO -->
+  <div class="info-card">
+    <div class="section-title">⚙️ Bot Configuration</div>
+    <div class="info-row"><span class="info-key">ETF</span><span class="info-val">GOLDBEES.NS</span></div>
+    <div class="info-row"><span class="info-key">Profit Target</span><span class="info-val" style="color:#00e676">+3.0%</span></div>
+    <div class="info-row"><span class="info-key">Stop Loss</span><span class="info-val" style="color:#ff5252">-1.0%</span></div>
+    <div class="info-row"><span class="info-key">Hold Period</span><span class="info-val">1–5 trading days</span></div>
+    <div class="info-row"><span class="info-key">Transaction Cost</span><span class="info-val">~0.755% round-trip</span></div>
+    <div class="info-row"><span class="info-key">Run At</span><span class="info-val">2026-04-04 09:36:40</span></div>
+  </div>
+
+  <!-- REFRESH -->
+  <div class="refresh-bar">
+    <span class="refresh-btn" onclick="location.reload()">🔄 Refresh Page</span>
+  </div>
+
+  <div class="footer">Gold Bot · Indian Gold ETF Strategy · 2026 · Run <code>python3 run_signal_08.py</code> to update</div>
+
+</div>
+</body>
+</html>

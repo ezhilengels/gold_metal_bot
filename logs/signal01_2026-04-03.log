@@ -1,0 +1,18 @@
+2026-04-03 14:47:19,448 [SIGNAL01] ============================================================
+2026-04-03 14:47:19,448 [SIGNAL01] SIGNAL 01 — BUY THE DIP — START
+2026-04-03 14:47:19,448 [SIGNAL01] ============================================================
+2026-04-03 14:47:19,448 [SIGNAL01] Fetching GOLDBEES.NS — last 35 days...
+2026-04-03 14:47:21,195 [SIGNAL01] Fetched 35 rows for GOLDBEES.NS. Latest: 2026-04-02 close=₹120.58
+2026-04-03 14:47:21,198 [SIGNAL01] Indicators: price=₹120.58, RSI=43.99, MA20=₹125.50, SwingHigh=₹128.07 (2026-03-18), PrevLow=₹123.02
+2026-04-03 14:47:21,198 [SIGNAL01] Scores: A=0.5 B=0.5 C=1.0 D=0.0 Total=2.0/4.0
+2026-04-03 14:47:21,198 [SIGNAL01] VERDICT: WATCH | Confidence: LOW | Score: 2.0
+2026-04-03 14:47:21,198 [SIGNAL01] SIGNAL 01 — BUY THE DIP — END
+2026-04-03 14:50:21,299 [SIGNAL01] ============================================================
+2026-04-03 14:50:21,299 [SIGNAL01] SIGNAL 01 — BUY THE DIP — START
+2026-04-03 14:50:21,299 [SIGNAL01] ============================================================
+2026-04-03 14:50:21,299 [SIGNAL01] Fetching GOLDBEES.NS — last 35 days...
+2026-04-03 14:50:23,292 [SIGNAL01] Fetched 35 rows for GOLDBEES.NS. Latest: 2026-04-02 close=₹120.58
+2026-04-03 14:50:23,294 [SIGNAL01] Indicators: price=₹120.58, RSI=43.99, MA20=₹125.50, SwingHigh=₹128.07 (2026-03-18), PrevLow=₹123.02
+2026-04-03 14:50:23,294 [SIGNAL01] Scores: A=0.5 B=0.5 C=1.0 D=0.0 Total=2.0/4.0
+2026-04-03 14:50:23,294 [SIGNAL01] VERDICT: WATCH | Confidence: LOW | Score: 2.0
+2026-04-03 14:50:23,294 [SIGNAL01] SIGNAL 01 — BUY THE DIP — END
