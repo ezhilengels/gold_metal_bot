@@ -71,6 +71,8 @@ def fetch_comex_price() -> dict:
         if df is None or len(df) == 0:
             raise ValueError("No COMEX data returned")
 
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
         price = float(df["Close"].dropna().iloc[-1])
         log.info(f"COMEX: ${price:.2f}/oz")
         return {"available": True, "price_usd_oz": price}
@@ -89,6 +91,8 @@ def fetch_usdinr_rate() -> dict:
         if df is None or len(df) == 0:
             raise ValueError("No USDINR data returned")
 
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
         rate = float(df["Close"].dropna().iloc[-1])
         log.info(f"USDINR: ₹{rate:.2f}")
         return {"available": True, "rate": rate}
@@ -112,6 +116,8 @@ def fetch_goldbees_price() -> dict:
         if df is None or len(df) == 0:
             raise ValueError(f"No data for {etf}")
 
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
         price_per_unit = float(df["Close"].dropna().iloc[-1])
         # GOLDBEES: 1 unit = approximately 1/100 gram of gold
         # So price per 10g equivalent = price_per_unit * 1000

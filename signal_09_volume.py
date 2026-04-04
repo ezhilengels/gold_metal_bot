@@ -67,10 +67,14 @@ def fetch_goldbees_volume() -> dict:
         if df is None or len(df) < 6:
             raise ValueError(f"Insufficient data for {etf}")
 
+        # Flatten MultiIndex columns (yfinance 0.2.x returns MultiIndex)
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
+
         df = df.dropna()
 
-        closes  = df["Close"].values.tolist()
-        volumes = df["Volume"].values.tolist()
+        closes  = df["Close"].values.flatten().tolist()
+        volumes = df["Volume"].values.flatten().tolist()
 
         if len(closes) < 6 or len(volumes) < 6:
             raise ValueError("Not enough rows after dropna")

@@ -3,9 +3,14 @@
 # Generates a self-contained HTML dashboard from Signal 08 result dict.
 # Called automatically by run_signal_08.py after every run.
 # Output: gold_bot/dashboard.html  (open directly in any browser)
+#
+# Signals shown: S01–S07 (original) + S09 Volume + S10 MCX Spread
+# Max score    : 95 pts  (S01=15, S02=25, S03=5, S04=15, S05=10,
+#                          S06=10, S09=10, S10=5, minus S07 penalty)
 # =============================================================================
 
 import os
+import math
 import json
 from datetime import datetime
 from typing import Optional
@@ -44,19 +49,38 @@ def _score_color(pct: float) -> str:
 
 def _signal_badge(pts, mx) -> str:
     pct = (pts / mx * 100) if mx else 0
-    if pct >= 80:  col = "#00e676"
-    elif pct >= 50: col = "#ffd740"
-    elif pct > 0:  col = "#ffab40"
-    else:          col = "#546e7a"
-    return col
+    if pct >= 80:  return "#00e676"
+    elif pct >= 50: return "#ffd740"
+    elif pct > 0:  return "#ffab40"
+    else:          return "#546e7a"
 
 def _esc(s) -> str:
     return str(s).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")
+
+def _phase_color(phase: str) -> str:
+    phase = phase.upper()
+    if "TRAIL_75" in phase: return "#00e676"
+    if "TRAIL_50" in phase: return "#69f0ae"
+    if "BREAKEVEN" in phase: return "#ffd740"
+    if "PROTECT" in phase:  return "#ffab40"
+    return "#8b949e"
+
+def _phase_label(phase: str) -> str:
+    m = {
+        "NOT_HOLDING": "Not Holding",
+        "PROTECT":     "Phase 1 — Capital Protection",
+        "BREAKEVEN":   "Phase 2 — Breakeven Stop",
+        "TRAIL_50":    "Phase 3 — Trail at 50% of Gain",
+        "TRAIL_75":    "Phase 4 — Trail at 75% (Target Hit!)",
+    }
+    return m.get(phase.upper(), phase)
 
 
 # =============================================================================
 # HTML BUILDER
 # =============================================================================
+
+MAX_SCORE = 95   # S01(15)+S02(25)+S03(5)+S04(15)+S05(10)+S06(10)+S09(10)+S10(5)+S12(8)
 
 def build_html(result: dict, config: Optional[dict] = None) -> str:
     cfg    = config or {}
@@ -70,32 +94,45 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
     etf    = cfg.get("primary_etf", "GOLDBEES.NS")
     scores = result.get("signal_scores", {})
 
-    score_pct   = round((final / 80) * 100, 1)
+    score_pct   = round((final / MAX_SCORE) * 100, 1)
     v_color     = _verdict_color(signal)
     v_bg        = _verdict_bg(signal)
     bar_color   = _score_color(score_pct)
 
-    # Signal score rows
+    # ── Signal score rows ────────────────────────────────────────────────────
     sig_rows = [
-        ("S01", "Buy the Dip",     scores.get("s01", {}), 15),
-        ("S02", "Macro Trigger",   scores.get("s02", {}), 25),
-        ("S03", "Seasonality",     scores.get("s03", {}),  5),
-        ("S04", "Bollinger Bands", scores.get("s04", {}), 15),
-        ("S05", "2026 Outlook",    scores.get("s05", {}), 10),
-        ("S06", "Weekly Routine",  scores.get("s06", {}), 10),
+        ("S01", "Buy the Dip",        scores.get("s01", {}), 15),
+        ("S02", "Macro Trigger",      scores.get("s02", {}), 25),
+        ("S03", "Seasonality",        scores.get("s03", {}),  5),
+        ("S04", "Bollinger Bands",    scores.get("s04", {}), 15),
+        ("S05", "2026 Outlook",       scores.get("s05", {}), 10),
+        ("S06", "Weekly Routine",     scores.get("s06", {}), 10),
+        ("S09", "Volume Confirm",     scores.get("s09", {}), 10),
+        ("S10", "MCX–COMEX Spread",   scores.get("s10", {}),  5),
+        ("S12", "Correlation Break",  scores.get("s12", {}),  8),
     ]
 
     def signal_card(code, label, sc, mx):
         pts   = sc.get("pts", 0)
-        col   = _signal_badge(pts, mx)
-        bar_w = round((pts / mx * 100) if mx else 0)
+        # negative pts (S12 penalty) get red colouring; bar shows 0
+        if pts < 0:
+            col   = "#ff5252"
+            bar_w = 0
+            pts_label = f"{pts:.0f}"
+        else:
+            col   = _signal_badge(pts, mx)
+            bar_w = round((pts / mx * 100) if mx else 0)
+            pts_label = f"{pts:.0f}"
+        sub   = sc.get("sub", "")  # optional sub-label (signal text)
+        sub_html = f'<div class="sig-sub">{_esc(sub)}</div>' if sub else ""
         return f"""
         <div class="sig-card">
           <div class="sig-header">
             <span class="sig-code">{_esc(code)}</span>
             <span class="sig-label">{_esc(label)}</span>
-            <span class="sig-pts" style="color:{col}">{pts:.0f}<span class="sig-max">/{mx}</span></span>
+            <span class="sig-pts" style="color:{col}">{pts_label}<span class="sig-max">/{mx}</span></span>
           </div>
+          {sub_html}
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:{bar_w}%;background:{col}"></div>
           </div>
@@ -103,7 +140,7 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
 
     cards_html = "".join(signal_card(c, l, s, m) for c, l, s, m in sig_rows)
 
-    # Trade parameters
+    # ── Trade parameters ─────────────────────────────────────────────────────
     trade_html = ""
     if result.get("entry_price") and "BUY" in signal.upper():
         trade_html = f"""
@@ -130,7 +167,156 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
         <div class="trade-note">Hold Period: 1–5 trading days. Exit by Thursday if entered Monday.</div>
       </div>"""
 
-    # Sell alert
+    # ── Trailing stop section ────────────────────────────────────────────────
+    ts_html = ""
+    trailing = result.get("trailing_stop", {})
+    if trailing and trailing.get("active"):
+        phase     = trailing.get("phase", "PROTECT")
+        ph_color  = _phase_color(phase)
+        ph_label  = _phase_label(phase)
+        stop_p    = trailing.get("stop_price", 0)
+        entry_p   = trailing.get("entry_price", cfg.get("holding_entry_price", 0))
+        gain_pct  = trailing.get("gain_pct", 0)
+        ts_action = trailing.get("action", trailing.get("message", ""))
+        gain_col  = "#00e676" if gain_pct >= 0 else "#ff5252"
+        ts_html = f"""
+      <div class="trailing-box">
+        <div class="section-title">🔒 Trailing Stop — Active Position</div>
+        <div class="ts-phase" style="color:{ph_color}">{_esc(ph_label)}</div>
+        <div class="ts-grid">
+          <div class="ts-item">
+            <div class="ts-lbl">Entry Price</div>
+            <div class="ts-val">₹{entry_p}</div>
+          </div>
+          <div class="ts-item">
+            <div class="ts-lbl">Current Stop</div>
+            <div class="ts-val" style="color:{ph_color}">₹{stop_p}</div>
+          </div>
+          <div class="ts-item">
+            <div class="ts-lbl">Gain / Loss</div>
+            <div class="ts-val" style="color:{gain_col}">{gain_pct:+.2f}%</div>
+          </div>
+          <div class="ts-item">
+            <div class="ts-lbl">Target</div>
+            <div class="ts-val" style="color:#00e676">+{cfg.get('profit_target_pct',3)}%</div>
+          </div>
+        </div>
+        <div class="ts-action">{_esc(ts_action)}</div>
+      </div>"""
+    elif trailing and not trailing.get("active") and trailing.get("phase") != "NOT_HOLDING":
+        # Has entry price set but not active for some reason
+        pass
+
+    # ── Correlation Monitor (Signal 12) ─────────────────────────────────────
+    corr_monitor_html = ""
+    s12_result = result.get("s12_result", {})
+    if s12_result and "DATA UNAVAILABLE" not in s12_result.get("signal", "DATA UNAVAILABLE"):
+        corrs      = s12_result.get("correlations", {})
+        s12_breaks = s12_result.get("breaks", [])
+        s12_alerts = s12_result.get("alert_types", [])
+        s12_regime = s12_result.get("regime", "")
+        s12_conf   = s12_result.get("confidence", "")
+        s12_pchg   = s12_result.get("price_changes", {})
+
+        # Status → color + icon
+        def _corr_color(status: str) -> str:
+            s = status.upper()
+            if s == "NORMAL":           return "#00e676"
+            if s == "WARNING":          return "#ffd740"
+            if s == "BREAK":            return "#ff5252"
+            if s == "DATA_UNAVAILABLE": return "#546e7a"
+            return "#8b949e"
+
+        def _corr_dot(status: str) -> str:
+            s = status.upper()
+            if s == "NORMAL":           return "🟢"
+            if s == "WARNING":          return "🟡"
+            if s == "BREAK":            return "🔴"
+            if s == "DATA_UNAVAILABLE": return "⬛"
+            return "❓"
+
+        # Build correlation rows
+        corr_rows_html = ""
+        for k, v in corrs.items():
+            pair    = v.get("pair", k)
+            c20     = v.get("corr")
+            c10     = v.get("corr_10d")
+            nb      = v.get("normal_band", "")
+            status  = v.get("status", "DATA_UNAVAILABLE")
+            impl    = v.get("implication", "")
+            col     = _corr_color(status)
+            dot     = _corr_dot(status)
+            c20_str = f"{c20:+.3f}" if c20 is not None else "N/A"
+            c10_str = f"{c10:+.3f}" if c10 is not None else "N/A"
+            impl_badge = ""
+            if impl and impl != "NONE":
+                impl_col = "#00e676" if impl == "BULLISH" else ("#ff5252" if impl == "BEARISH" else "#8b949e")
+                impl_badge = f'<span style="font-size:.68rem;padding:1px 5px;border-radius:3px;background:{impl_col}22;color:{impl_col};margin-left:4px">{_esc(impl)}</span>'
+            corr_rows_html += f"""
+            <div class="corr-row">
+              <span class="corr-pair">{_esc(pair)}</span>
+              <span class="corr-val" style="color:{col}">{_esc(c20_str)}</span>
+              <span class="corr-val dim">{_esc(c10_str)}</span>
+              <span class="corr-band">{_esc(nb)}</span>
+              <span class="corr-status">{dot} {_esc(status.replace('_',' '))}{impl_badge}</span>
+            </div>"""
+
+        # Build breaks rows
+        breaks_html = ""
+        if s12_breaks:
+            for b in s12_breaks:
+                impl_b  = b.get("implication", "")
+                impl_c  = "#00e676" if impl_b == "BULLISH" else ("#ff5252" if impl_b == "BEARISH" else "#8b949e")
+                arrow   = "↑" if impl_b == "BULLISH" else ("↓" if impl_b == "BEARISH" else "?")
+                note_b  = b.get("note", "")
+                breaks_html += f"""
+            <div class="break-row">
+              <span class="break-pair" style="color:{impl_c}">{arrow} {_esc(b.get('pair','').upper())}</span>
+              <span class="break-note">{_esc(note_b[:120])}</span>
+            </div>"""
+        else:
+            breaks_html = '<div class="break-ok">✅ All correlations normal — no breaks detected</div>'
+
+        # Build alert badges
+        alerts_html = ""
+        if s12_alerts:
+            for a in s12_alerts:
+                sev     = a.get("severity", "")
+                sev_col = "#ff5252" if sev == "HIGH" else ("#ffd740" if sev == "MEDIUM" else "#8b949e")
+                alerts_html += f"""
+            <div class="alert-badge" style="border-color:{sev_col}44">
+              <span style="font-size:1.1rem">{_esc(a.get('emoji',''))}</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;color:{sev_col}">{_esc(a.get('label',''))}</div>
+                <div style="font-size:.75rem;color:#8b949e">{_esc(a.get('message','')[:120])}</div>
+              </div>
+            </div>"""
+
+        # Regime badge color
+        regime_col = "#00e676" if "BULLISH" in s12_regime.upper() else (
+                     "#ff5252" if "BEARISH" in s12_regime.upper() else "#ffd740")
+
+        corr_monitor_html = f"""
+      <div class="corr-card">
+        <div class="section-title" style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          📡 Correlation Monitor
+          <span style="font-size:.78rem;padding:3px 8px;border-radius:4px;background:{regime_col}22;color:{regime_col};font-weight:700">{_esc(s12_regime)}</span>
+          <span style="font-size:.75rem;color:#8b949e;margin-left:auto">Confidence: {_esc(s12_conf)}</span>
+        </div>
+        <div class="corr-header">
+          <span class="corr-pair" style="color:#8b949e">Pair</span>
+          <span class="corr-val" style="color:#8b949e">20d r</span>
+          <span class="corr-val" style="color:#8b949e">10d r</span>
+          <span class="corr-band" style="color:#8b949e">Normal Band</span>
+          <span class="corr-status" style="color:#8b949e">Status</span>
+        </div>
+        {corr_rows_html}
+        <div class="corr-section-title">CORRELATION BREAKS</div>
+        {breaks_html}
+        {"<div class='corr-section-title'>COMPOUND ALERTS</div>" + alerts_html if s12_alerts else ""}
+      </div>"""
+
+    # ── Sell alert ───────────────────────────────────────────────────────────
     sell_html = ""
     if result.get("sell_alert"):
         sell_html = f"""
@@ -138,50 +324,51 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
         ⚡ <strong>EXIT ALERT:</strong> {_esc(result['sell_alert'])}
       </div>"""
 
-    # Score gauge segments
+    # ── Score gauge arc ──────────────────────────────────────────────────────
+    # Zones (absolute pts, sum=95): 0-14 No Trade, 15-29 Wait, 30-44 Watch, 45-59 Buy, 60-95 Strong Buy
     zones = [
         (15, "#ff5252", "No Trade"),
         (15, "#ffab40", "Wait"),
         (15, "#ffd740", "Watch"),
         (15, "#69f0ae", "Buy"),
-        (20, "#00e676", "Strong Buy"),
+        (35, "#00e676", "Strong Buy"),
     ]
     zone_bars = ""
     for width_pts, col, lbl in zones:
-        w = round(width_pts / 80 * 100)
+        w = round(width_pts / MAX_SCORE * 100)
         zone_bars += f'<div class="zone-seg" style="width:{w}%;background:{col}" title="{lbl}"></div>'
 
-    # Score thresholds row
     thresholds = """
       <div class="thresh-row">
-        <span>0</span><span>15<br><small>WAIT</small></span>
+        <span>0</span>
+        <span>15<br><small>WAIT</small></span>
         <span>30<br><small>WATCH</small></span>
         <span>45<br><small>BUY</small></span>
         <span>60<br><small>STR BUY</small></span>
-        <span>80</span>
+        <span>95</span>
       </div>"""
 
-    # S07 penalty row
+    # ── S07 penalty card ─────────────────────────────────────────────────────
     pen_color = "#ff5252" if pen >= 20 else ("#ffab40" if pen > 0 else "#546e7a")
     pen_html = f"""
         <div class="sig-card" style="border-color:{pen_color}33">
           <div class="sig-header">
             <span class="sig-code">S07</span>
             <span class="sig-label">Risk Gate Penalty</span>
-            <span class="sig-pts" style="color:{pen_color}">-{pen:.0f}<span class="sig-max">/80</span></span>
+            <span class="sig-pts" style="color:{pen_color}">-{pen:.0f}<span class="sig-max">/{MAX_SCORE}</span></span>
           </div>
         </div>"""
 
-    # Score table summary
+    # ── Score table ──────────────────────────────────────────────────────────
     score_table = f"""
       <div class="score-summary">
-        <div class="score-row"><span>Raw Score</span><span>{raw:.1f} / 80</span></div>
+        <div class="score-row"><span>Raw Score</span><span>{raw:.1f} / {MAX_SCORE}</span></div>
         <div class="score-row"><span>S07 Penalty</span><span style="color:#ffab40">-{pen:.1f} pts</span></div>
-        <div class="score-row bold"><span>Final Score</span><span style="color:{bar_color}">{final:.1f} / 80</span></div>
+        <div class="score-row bold"><span>Final Score</span><span style="color:{bar_color}">{final:.1f} / {MAX_SCORE}</span></div>
         <div class="score-row"><span>Normalized</span><span>{score_pct}%</span></div>
       </div>"""
 
-    # Blocked banner
+    # ── Blocked banner ───────────────────────────────────────────────────────
     blocked_html = ""
     if "BLOCKED" in signal.upper():
         reasons = result.get("avoid_reasons", result.get("reason", []))
@@ -195,18 +382,25 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
         <small>{reasons_str}</small>
       </div>"""
 
-    # Threshold guide
+    # ── Score guide ──────────────────────────────────────────────────────────
     guide_html = """
       <div class="guide-box">
-        <div class="section-title">Score Guide</div>
+        <div class="section-title">Score Guide (out of 95)</div>
         <div class="guide-row"><span class="dot" style="background:#00e676"></span><span>&ge;60 — STRONG BUY</span></div>
         <div class="guide-row"><span class="dot" style="background:#69f0ae"></span><span>&ge;45 — BUY</span></div>
         <div class="guide-row"><span class="dot" style="background:#ffd740"></span><span>&ge;30 — WATCH</span></div>
         <div class="guide-row"><span class="dot" style="background:#ffab40"></span><span>&ge;15 — WAIT</span></div>
         <div class="guide-row"><span class="dot" style="background:#ff5252"></span><span>&lt;15 — DO NOT TRADE</span></div>
+        <div class="guide-row" style="margin-top:10px;padding-top:8px;border-top:1px solid #21262d">
+          <span class="dot" style="background:#546e7a"></span>
+          <span style="color:#8b949e;font-size:.8rem">Max: S01=15 S02=25 S03=5 S04=15 S05=10 S06=10 S09=10 S10=5 S12=8</span>
+        </div>
       </div>"""
 
-    needle_deg = round((final / 80) * 180 - 90)
+    # ── SVG gauge needle calculation ─────────────────────────────────────────
+    angle_rad = math.radians(score_pct / 100 * 180)
+    nx = round(100 + 70 * math.cos(math.radians(180) - angle_rad), 1)
+    ny = round(100 - 70 * math.sin(angle_rad), 1)
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -271,6 +465,7 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
   .sig-label{{flex:1;font-size:.9rem;color:#c9d1d9}}
   .sig-pts{{font-size:1.1rem;font-weight:700}}
   .sig-max{{font-size:.75rem;color:#8b949e;font-weight:400}}
+  .sig-sub{{font-size:.75rem;color:#8b949e;margin-bottom:6px;padding-left:2px}}
   .sig-bar-bg{{height:5px;background:#21262d;border-radius:3px;overflow:hidden}}
   .sig-bar-fill{{height:100%;border-radius:3px;transition:width .4s ease}}
 
@@ -286,6 +481,17 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
   .trade-item.green .trade-val{{color:#00e676}}
   .trade-item.red .trade-val{{color:#ff5252}}
   .trade-note{{font-size:.78rem;color:#8b949e;margin-top:8px;text-align:center}}
+
+  /* ── Trailing stop box ── */
+  .trailing-box{{background:#0f1822;border:1px solid #ffd74033;border-radius:12px;padding:20px;margin-bottom:16px}}
+  .ts-phase{{font-size:1rem;font-weight:700;margin-bottom:14px;letter-spacing:.3px}}
+  .ts-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}}
+  @media(max-width:600px){{.ts-grid{{grid-template-columns:repeat(2,1fr)}}}}
+  .ts-item{{background:#ffffff08;border-radius:8px;padding:10px;text-align:center}}
+  .ts-lbl{{font-size:.72rem;color:#8b949e;margin-bottom:4px}}
+  .ts-val{{font-size:1.05rem;font-weight:700;color:#e6edf3}}
+  .ts-action{{font-size:.83rem;color:#c9d1d9;background:#ffffff06;border-radius:6px;
+              padding:10px 12px;border-left:3px solid #ffd740;line-height:1.5}}
 
   /* ── Alert / blocked ── */
   .alert-box{{background:#3d1a0011;border:1px solid #ffab4044;border-radius:10px;
@@ -315,6 +521,37 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
 
   /* ── Footer ── */
   .footer{{text-align:center;font-size:.78rem;color:#484f58;margin-top:24px;padding-bottom:8px}}
+
+  /* ── Correlation monitor ── */
+  .corr-card{{background:#161b22;border:1px solid #30363d;border-radius:12px;
+              padding:20px 24px;margin-bottom:20px}}
+  .corr-header,.corr-row{{display:grid;grid-template-columns:1.8fr .8fr .8fr 1.4fr 1.6fr;
+                           gap:8px;align-items:center;padding:6px 0;
+                           border-bottom:1px solid #21262d;font-size:.83rem}}
+  .corr-header{{border-bottom:2px solid #30363d;padding-bottom:8px;margin-bottom:4px}}
+  .corr-row:last-of-type{{border-bottom:none}}
+  .corr-pair{{font-weight:600;color:#c9d1d9;font-size:.82rem}}
+  .corr-val{{text-align:center;font-weight:700;font-size:.88rem;font-family:monospace}}
+  .corr-val.dim{{color:#8b949e;font-weight:400}}
+  .corr-band{{text-align:center;font-size:.75rem;color:#8b949e}}
+  .corr-status{{font-size:.78rem;color:#c9d1d9}}
+  .corr-section-title{{font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;
+                        color:#484f58;margin:12px 0 6px;padding-top:8px;
+                        border-top:1px solid #21262d}}
+  .break-row{{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #21262d;
+              align-items:flex-start;font-size:.82rem}}
+  .break-row:last-child{{border-bottom:none}}
+  .break-pair{{font-weight:700;white-space:nowrap;min-width:90px;padding-top:1px}}
+  .break-note{{color:#8b949e;line-height:1.4;flex:1}}
+  .break-ok{{font-size:.84rem;color:#00e676;padding:6px 0}}
+  .alert-badge{{display:flex;gap:12px;align-items:flex-start;padding:8px 12px;
+                border:1px solid #30363d;border-radius:8px;margin-bottom:8px;
+                background:#ffffff05}}
+  .alert-badge:last-child{{margin-bottom:0}}
+  @media(max-width:620px){{
+    .corr-header,.corr-row{{grid-template-columns:1fr 1fr;}}
+    .corr-band,.corr-val.dim{{display:none}}
+  }}
 
   /* ── Scrollbar ── */
   ::-webkit-scrollbar{{width:6px}} ::-webkit-scrollbar-track{{background:#0d1117}}
@@ -350,6 +587,12 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
   <!-- TRADE PARAMS -->
   {trade_html}
 
+  <!-- TRAILING STOP -->
+  {ts_html}
+
+  <!-- CORRELATION MONITOR (Signal 12) -->
+  {corr_monitor_html}
+
   <div class="grid-2">
     <!-- LEFT: GAUGE + SCORE SUMMARY -->
     <div>
@@ -365,13 +608,11 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
                     stroke-linecap="round"
                     stroke-dasharray="{round(score_pct/100*283,1)} 283"/>
               <!-- needle -->
-              <line x1="100" y1="100"
-                    x2="{round(100 + 70*__import__('math').cos(__import__('math').radians(180 - score_pct/100*180)),1)}"
-                    y2="{round(100 - 70*__import__('math').sin(__import__('math').radians(score_pct/100*180)),1)}"
+              <line x1="100" y1="100" x2="{nx}" y2="{ny}"
                     stroke="#ffd740" stroke-width="2.5" stroke-linecap="round"/>
               <circle cx="100" cy="100" r="5" fill="#ffd740"/>
             </svg>
-            <div class="gauge-number">{final:.0f}<span class="gauge-max">/80</span></div>
+            <div class="gauge-number">{final:.0f}<span class="gauge-max">/{MAX_SCORE}</span></div>
           </div>
         </div>
         <div class="zone-bar">{zone_bars}</div>
@@ -399,6 +640,7 @@ def build_html(result: dict, config: Optional[dict] = None) -> str:
     <div class="info-row"><span class="info-key">Stop Loss</span><span class="info-val" style="color:#ff5252">-{cfg.get('stop_loss_pct',1.0)}%</span></div>
     <div class="info-row"><span class="info-key">Hold Period</span><span class="info-val">1–5 trading days</span></div>
     <div class="info-row"><span class="info-key">Transaction Cost</span><span class="info-val">~0.755% round-trip</span></div>
+    <div class="info-row"><span class="info-key">Max Score</span><span class="info-val">{MAX_SCORE} pts (9 signals + S12)</span></div>
     <div class="info-row"><span class="info-key">Run At</span><span class="info-val">{_esc(ts)}</span></div>
   </div>
 

@@ -10,18 +10,24 @@
 #   2. Signal 01 (Buy the Dip)
 #   3. Signal 02 (Macro Trigger)
 #   4. Signal 04 (Bollinger Bands)
-#   5. Signal 03 (Seasonality)         ← stub if not yet built
-#   6. Signal 05 (2026 Outlook)        ← stub if not yet built
-#   7. Signal 06 (Weekly Routine)      ← stub if not yet built
-#   8. This file — combine & score.
+#   5. Signal 03 (Seasonality)
+#   6. Signal 05 (2026 Outlook)
+#   7. Signal 06 (Weekly Routine)
+#   8. Signal 09 (Volume Confirmation)
+#   9. Signal 10 (MCX-COMEX Spread)
+#  10. Signal 12 (Correlation Break Alert)
+#  11. This file — combine & score.
 #
-# SCORING (max 80 pts — Signal 07 is a penalty gate, not a scorer):
-#   Signal 02  Macro Trigger   →  25 pts  (most reliable)
-#   Signal 01  Buy the Dip     →  15 pts
-#   Signal 04  Bollinger Bands →  15 pts
-#   Signal 06  Weekly Routine  →  10 pts
-#   Signal 05  2026 Outlook    →  10 pts
-#   Signal 03  Seasonality     →   5 pts
+# SCORING (max 95 pts — Signal 07 is a penalty gate, not a scorer):
+#   Signal 02  Macro Trigger        →  25 pts  (most reliable)
+#   Signal 01  Buy the Dip          →  15 pts
+#   Signal 04  Bollinger Bands      →  15 pts
+#   Signal 06  Weekly Routine       →  10 pts
+#   Signal 05  2026 Outlook         →  10 pts
+#   Signal 09  Volume Confirmation  →  10 pts
+#   Signal 12  Correlation Break    →   8 pts  (can be -5 on multi-bearish break)
+#   Signal 03  Seasonality          →   5 pts
+#   Signal 10  MCX-COMEX Spread     →   5 pts
 #
 # Signal 07 Penalties:
 #   AVOID   →  full block (score irrelevant)
@@ -113,6 +119,14 @@ def _load_signal_10():
         return run_signal_10
     except ImportError as e:
         log.error(f"Cannot import Signal 10: {e}")
+        return None
+
+def _load_signal_12():
+    try:
+        from signal_12_correlation_break import run_signal_12
+        return run_signal_12
+    except ImportError as e:
+        log.error(f"Cannot import Signal 12: {e}")
         return None
 
 def _load_signal_05():
@@ -399,6 +413,43 @@ def score_signal_10(result: dict) -> tuple[float, float, str]:
     return float(pts), MAX, note
 
 
+def score_signal_12(result: dict) -> tuple[float, float, str]:
+    """
+    Returns (points_earned, max_points, note). Signal 12 — Correlation Break Alert.
+    Max = +8 pts.  Can return negative pts (−5 penalty for multi-bearish break).
+    """
+    MAX = 8.0
+    sig   = result.get("signal",   "DATA UNAVAILABLE")
+    score = result.get("score",    0)
+    regime = result.get("regime",  "UNKNOWN")
+    n_br  = result.get("n_breaks", 0)
+    impl  = result.get("overall_implication", "NONE")
+
+    if "DATA UNAVAILABLE" in sig:
+        return 0.0, MAX, "S12 ⬛ CORRELATION DATA UNAVAILABLE — 0/8 pts"
+
+    if result.get("is_nontrading"):
+        return 0.0, MAX, f"S12 🚫 NON-TRADING DAY — 0/8 pts | Regime: {regime}"
+
+    pts = float(score)   # already computed in signal_12 (-5 to +8)
+
+    if pts >= 8:
+        emoji = "✅✅"
+    elif pts >= 5:
+        emoji = "✅"
+    elif pts > 0:
+        emoji = "⚠️ "
+    elif pts == 0 and n_br > 0 and impl == "BEARISH":
+        emoji = "❌"
+    elif pts < 0:
+        emoji = "🚫"
+    else:
+        emoji = "⚠️ "
+
+    note = f"S12 {emoji} CORR: {sig[:35]} ({n_br} break{'s' if n_br!=1 else ''}) — {pts:+.0f}/8 pts"
+    return pts, MAX, note
+
+
 def score_signal_06(result: dict) -> tuple[float, float, str]:
     """Returns (points_earned, max_points, note)."""
     MAX = 10.0
@@ -503,7 +554,7 @@ def calculate_verdict(final_score: float, is_nontrading: bool) -> tuple[str, str
 # SCORE BAR RENDERER
 # =============================================================================
 
-def render_score_bar(score: float, max_score: float = 80.0, width: int = 40) -> str:
+def render_score_bar(score: float, max_score: float = 95.0, width: int = 40) -> str:
     """Render a simple ASCII progress bar for the score."""
     pct = min(score / max_score, 1.0)
     filled = int(pct * width)
@@ -552,9 +603,9 @@ def print_verdict_output(
     row()
     row(f"  {s07_note}")
     sep()
-    row(f"  Raw Score (before penalty) : {raw_score:.1f} / 80.0")
+    row(f"  Raw Score (before penalty) : {raw_score:.1f} / 95.0")
     row(f"  S07 Penalty                : -{s07_penalty:.1f} pts")
-    row(f"  FINAL SCORE                : {final_score:.1f} / 80.0")
+    row(f"  FINAL SCORE                : {final_score:.1f} / 95.0")
     row(f"  {render_score_bar(final_score)}")
     sep()
     row(f"  VERDICT    : {signal}")
@@ -759,6 +810,10 @@ def run_signal_08() -> dict:
     run_s10 = _load_signal_10()
     r10 = run_s10() if run_s10 else {"signal": "DATA UNAVAILABLE", "confidence": "NONE", "score": 0}
 
+    log.info("Running Signal 12 (Correlation Break Alert)...")
+    run_s12 = _load_signal_12()
+    r12 = run_s12() if run_s12 else {"signal": "DATA UNAVAILABLE", "confidence": "NONE", "score": 0}
+
     # ── STEP 3: Score each signal ─────────────────────────────────────────────
     s01_pts, s01_max, s01_note = score_signal_01(r01)
     s02_pts, s02_max, s02_note = score_signal_02(r02)
@@ -768,6 +823,7 @@ def run_signal_08() -> dict:
     s06_pts, s06_max, s06_note = score_signal_06(r06)
     s09_pts, s09_max, s09_note = score_signal_09(r09)
     s10_pts, s10_max, s10_note = score_signal_10(r10)
+    s12_pts, s12_max, s12_note = score_signal_12(r12)
 
     scores = [
         (s01_pts, s01_max, s01_note),
@@ -778,16 +834,17 @@ def run_signal_08() -> dict:
         (s06_pts, s06_max, s06_note),
         (s09_pts, s09_max, s09_note),
         (s10_pts, s10_max, s10_note),
+        (s12_pts, s12_max, s12_note),
     ]
 
     log.info(
         f"Scores: S01={s01_pts} S02={s02_pts} S03={s03_pts} "
         f"S04={s04_pts} S05={s05_pts} S06={s06_pts} "
-        f"S09={s09_pts} S10={s10_pts}"
+        f"S09={s09_pts} S10={s10_pts} S12={s12_pts}"
     )
 
     # ── STEP 4: Calculate final score ─────────────────────────────────────────
-    raw_score   = s01_pts + s02_pts + s03_pts + s04_pts + s05_pts + s06_pts + s09_pts + s10_pts
+    raw_score   = s01_pts + s02_pts + s03_pts + s04_pts + s05_pts + s06_pts + s09_pts + s10_pts + s12_pts
     final_score = max(0.0, raw_score - s07_penalty)
 
     log.info(
@@ -843,7 +900,7 @@ def run_signal_08() -> dict:
         trailing_stop_result=trailing_stop_result,
     )
 
-    log.info(f"FINAL VERDICT: {signal} | Score: {final_score:.1f}/80 | Confidence: {confidence}")
+    log.info(f"FINAL VERDICT: {signal} | Score: {final_score:.1f}/95 | Confidence: {confidence}")
     log.info("SIGNAL 08 — FINAL VERDICT — END")
 
     result = {
@@ -868,8 +925,11 @@ def run_signal_08() -> dict:
             "s06": {"pts": s06_pts, "max": s06_max},
             "s09": {"pts": s09_pts, "max": s09_max},
             "s10": {"pts": s10_pts, "max": s10_max},
+            "s12": {"pts": s12_pts, "max": s12_max},
             "s07_penalty": s07_penalty,
         },
+        # ── Signal 12 correlation detail (for dashboard) ───────────────────
+        "s12_result": r12,
     }
 
     # ── STEP 10: Telegram alert ───────────────────────────────────────────────

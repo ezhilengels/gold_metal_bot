@@ -97,9 +97,9 @@ def _send(text: str, parse_mode: str = "HTML") -> bool:
 # MESSAGE BUILDERS  (one per alert type)
 # =============================================================================
 
-def _score_bar(score: float, max_score: float = 80.0, width: int = 20) -> str:
+def _score_bar(score: float, max_score: float = 95.0, width: int = 20) -> str:
     """Compact ASCII bar for Telegram."""
-    pct    = min(score / max_score, 1.0)
+    pct    = min(max(score, 0) / max_score, 1.0)
     filled = int(pct * width)
     return "█" * filled + "░" * (width - filled)
 
@@ -122,21 +122,30 @@ def build_buy_alert(result: dict) -> str:
     icon = "🟢🟢" if "STRONG" in signal else "🟢"
     bar  = _score_bar(score)
 
+    def _pts(key, mx):
+        v = scores.get(key, {}).get('pts')
+        if isinstance(v, (int, float)):
+            return f"{v:.0f}/{mx}"
+        return f"—/{mx}"
+
     lines = [
         f"{icon} <b>GOLD BOT — {signal}</b>",
         f"<code>{ts}</code>",
         "",
-        f"<b>SCORE: {score:.1f} / 80</b>",
+        f"<b>SCORE: {score:.1f} / 95</b>",
         f"<code>[{bar}]</code>",
         "",
         "📊 <b>Signal Breakdown:</b>",
-        f"  S01 Buy Dip   : {scores.get('s01', {}).get('pts', '—'):.0f}/15" if isinstance(scores.get('s01', {}).get('pts'), (int, float)) else "  S01 Buy Dip   : —/15",
-        f"  S02 Macro     : {scores.get('s02', {}).get('pts', '—'):.0f}/25" if isinstance(scores.get('s02', {}).get('pts'), (int, float)) else "  S02 Macro     : —/25",
-        f"  S03 Seasonality: {scores.get('s03', {}).get('pts', '—'):.0f}/5" if isinstance(scores.get('s03', {}).get('pts'), (int, float)) else "  S03 Seasonality: —/5",
-        f"  S04 BB Bands  : {scores.get('s04', {}).get('pts', '—'):.0f}/15" if isinstance(scores.get('s04', {}).get('pts'), (int, float)) else "  S04 BB Bands  : —/15",
-        f"  S05 Outlook   : {scores.get('s05', {}).get('pts', '—'):.0f}/10" if isinstance(scores.get('s05', {}).get('pts'), (int, float)) else "  S05 Outlook   : —/10",
-        f"  S06 Weekly    : {scores.get('s06', {}).get('pts', '—'):.0f}/10" if isinstance(scores.get('s06', {}).get('pts'), (int, float)) else "  S06 Weekly    : —/10",
-        f"  S07 Penalty   : -{scores.get('s07_penalty', 0):.0f} pts",
+        f"  S01 Buy Dip    : {_pts('s01', 15)}",
+        f"  S02 Macro      : {_pts('s02', 25)}",
+        f"  S03 Seasonality: {_pts('s03', 5)}",
+        f"  S04 BB Bands   : {_pts('s04', 15)}",
+        f"  S05 Outlook    : {_pts('s05', 10)}",
+        f"  S06 Weekly     : {_pts('s06', 10)}",
+        f"  S09 Volume     : {_pts('s09', 10)}",
+        f"  S10 MCX Spread : {_pts('s10', 5)}",
+        f"  S12 Corr Break : {_pts('s12', 8)}",
+        f"  S07 Penalty    : -{scores.get('s07_penalty', 0):.0f} pts",
         "",
         f"<b>Confidence  : {conf}</b>",
     ]
@@ -249,7 +258,7 @@ def build_watch_alert(result: dict) -> str:
         "🟡 <b>GOLD BOT — WATCH / CONDITIONAL BUY</b>",
         f"<code>{ts}</code>",
         "",
-        f"<b>Score: {score:.1f} / 80</b>",
+        f"<b>Score: {score:.1f} / 95</b>",
         f"<code>[{bar}]</code>",
         "",
         "⚠️ Partial signal alignment. <b>Enter 50% position only.</b>",
@@ -291,6 +300,88 @@ def build_data_unavailable_alert(result: dict) -> str:
     return "\n".join(lines)
 
 
+def build_correlation_break_alert(s12_result: dict, ts: str = "") -> str:
+    """
+    Compound correlation break alert — sent when Signal 12 detects a
+    compound alert type (A-E). Single breaks are dashboard-only; compound
+    breaks trigger a Telegram notification per the planning spec (Section 10).
+
+    Called separately from send_verdict_alert with result.get("s12_result").
+    Only called when s12_result contains one or more alert_types entries.
+    """
+    if not ts:
+        ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    alerts  = s12_result.get("alert_types", [])
+    regime  = s12_result.get("regime", "")
+    s12_sig = s12_result.get("signal", "")
+    s12_pts = s12_result.get("score", 0)
+    breaks  = s12_result.get("breaks", [])
+    pchg    = s12_result.get("price_changes", {})
+
+    # Headline icon based on overall implication
+    overall = s12_result.get("overall_implication", "")
+    if overall == "BULLISH":
+        headline_icon = "📡🟢"
+    elif overall == "BEARISH":
+        headline_icon = "📡🔴"
+    else:
+        headline_icon = "📡🔵"
+
+    lines = [
+        f"{headline_icon} <b>GOLD BOT — CORRELATION BREAK ALERT (S12)</b>",
+        f"<code>{ts}</code>",
+        "",
+        f"<b>Regime:</b> {regime}",
+        f"<b>Signal:</b> {s12_sig}",
+        f"<b>S12 Score:</b> {s12_pts:+.0f}/8 pts",
+        "",
+        "⚠️ <b>COMPOUND ALERT(S) DETECTED:</b>",
+    ]
+
+    # One block per alert type
+    for a in alerts:
+        sev     = a.get("severity", "MEDIUM")
+        sev_str = f"[{sev}]"
+        lines += [
+            "",
+            f"  {a.get('emoji', '🔔')} <b>Type {a.get('type', '?')} — {a.get('label', '')}</b> {sev_str}",
+            f"  {a.get('message', '')}",
+        ]
+
+    # Show which correlations broke
+    if breaks:
+        lines += ["", "🔗 <b>Correlation Breaks:</b>"]
+        for b in breaks:
+            impl   = b.get("implication", "")
+            arrow  = "↑" if impl == "BULLISH" else ("↓" if impl == "BEARISH" else "?")
+            lines.append(f"  {arrow} {b.get('pair','').upper()} — {impl}")
+
+    # 5-day price changes summary
+    gb_5d = pchg.get("goldbees_5d")
+    cx_5d = pchg.get("comex_5d")
+    if gb_5d is not None or cx_5d is not None:
+        lines.append("")
+        lines.append("📈 <b>5-Day Changes:</b>")
+        if gb_5d is not None:
+            lines.append(f"  GOLDBEES : {gb_5d:+.2f}%")
+        if cx_5d is not None:
+            lines.append(f"  COMEX    : {cx_5d:+.2f}%")
+        dxy_5d = pchg.get("dxy_5d")
+        if dxy_5d is not None:
+            lines.append(f"  DXY      : {dxy_5d:+.2f}%")
+
+    lines += [
+        "",
+        "ℹ️ <i>Correlation breaks affect S12 composite score.</i>",
+        "<i>Review full dashboard before making any trade decision.</i>",
+        "",
+        "⚠️ <i>This is a signal, not financial advice.</i>",
+    ]
+
+    return "\n".join(lines)
+
+
 # =============================================================================
 # MAIN DISPATCH  — called by Signal 08
 # =============================================================================
@@ -299,9 +390,9 @@ def send_verdict_alert(result: dict) -> bool:
     """
     Main entry point called by run_signal_08() after the verdict is generated.
     Picks the correct alert type based on the verdict signal.
-    Returns True if message was sent, False otherwise.
+    Returns True if at least one message was sent, False otherwise.
 
-    Alert triggers (from planning doc):
+    Alert triggers:
         STRONG BUY / BUY   → buy_alert  (entry, target, stop)
         SELL / TAKE PROFIT → sell_alert (exit if holding)
         AVOID / BLOCKED    → avoid_alert (trade blocked)
@@ -309,9 +400,14 @@ def send_verdict_alert(result: dict) -> bool:
         DO NOT TRADE       → no alert (silent — avoid alert fatigue)
         WAIT               → no alert (silent)
         DATA UNAVAILABLE   → data_unavailable_alert
+
+    Signal 12 compound alerts (Types A-E) are ALWAYS sent independently
+    whenever detected, regardless of the main verdict.
+    Single correlation breaks are dashboard-only (not sent here).
     """
     signal = result.get("signal", "")
     ts     = result.get("timestamp", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    sent   = False
 
     log.info(f"Telegram dispatch: signal={signal}")
 
@@ -320,39 +416,51 @@ def send_verdict_alert(result: dict) -> bool:
         msg = build_buy_alert(result)
         ok  = _send(msg)
         log.info(f"Telegram BUY alert sent: {ok}")
-        return ok
+        sent = sent or ok
 
     # ── SELL / TAKE PROFIT (from Signal 04 exit note) ────────────────────────
-    if result.get("sell_alert") and "SELL" in result.get("sell_alert", "").upper():
+    elif result.get("sell_alert") and "SELL" in result.get("sell_alert", "").upper():
         msg = build_sell_alert(result)
         ok  = _send(msg)
         log.info(f"Telegram SELL alert sent: {ok}")
-        return ok
+        sent = sent or ok
 
     # ── AVOID / BLOCKED ───────────────────────────────────────────────────────
-    if "BLOCKED" in signal or "AVOID" in signal:
+    elif "BLOCKED" in signal or "AVOID" in signal:
         msg = build_avoid_alert(result)
         ok  = _send(msg)
         log.info(f"Telegram AVOID alert sent: {ok}")
-        return ok
+        sent = sent or ok
 
     # ── WATCH ─────────────────────────────────────────────────────────────────
-    if "WATCH" in signal:
+    elif "WATCH" in signal:
         msg = build_watch_alert(result)
         ok  = _send(msg)
         log.info(f"Telegram WATCH alert sent: {ok}")
-        return ok
+        sent = sent or ok
 
     # ── DATA UNAVAILABLE ──────────────────────────────────────────────────────
-    if "DATA UNAVAILABLE" in signal or "INSUFFICIENT" in signal:
+    elif "DATA UNAVAILABLE" in signal or "INSUFFICIENT" in signal:
         msg = build_data_unavailable_alert(result)
         ok  = _send(msg)
         log.info(f"Telegram DATA_UNAVAILABLE alert sent: {ok}")
-        return ok
+        sent = sent or ok
 
-    # ── DO NOT TRADE / WAIT — silent, no alert ────────────────────────────────
-    log.info(f"Telegram: no alert sent for verdict '{signal}' (silent verdict)")
-    return False
+    else:
+        # ── DO NOT TRADE / WAIT — silent, no verdict alert ───────────────────
+        log.info(f"Telegram: no verdict alert sent for '{signal}' (silent verdict)")
+
+    # ── Signal 12 compound break alerts (ALWAYS sent independently) ──────────
+    # Single breaks are dashboard-only; compound alert_types trigger Telegram.
+    s12_result = result.get("s12_result", {})
+    if s12_result and s12_result.get("alert_types"):
+        corr_msg = build_correlation_break_alert(s12_result, ts=ts)
+        ok = _send(corr_msg)
+        log.info(f"Telegram S12 compound break alert sent: {ok} "
+                 f"({len(s12_result['alert_types'])} alert type(s))")
+        sent = sent or ok
+
+    return sent
 
 
 # =============================================================================
@@ -374,7 +482,8 @@ def send_test_message() -> bool:
         "  📤 SELL / TAKE PROFIT — exit signal\n"
         "  🚫 AVOID — trade blocked by risk filter\n"
         "  🟡 WATCH — partial alignment heads-up\n"
-        "  ⬛ DATA UNAVAILABLE — fetch failure warning\n\n"
+        "  ⬛ DATA UNAVAILABLE — fetch failure warning\n"
+        "  📡 S12 COMPOUND BREAK — correlation regime alert (A–E)\n\n"
         "<i>Gold Bot is ready.</i>"
     )
     ok = _send(msg)

@@ -61,6 +61,7 @@
   .sig-label{flex:1;font-size:.9rem;color:#c9d1d9}
   .sig-pts{font-size:1.1rem;font-weight:700}
   .sig-max{font-size:.75rem;color:#8b949e;font-weight:400}
+  .sig-sub{font-size:.75rem;color:#8b949e;margin-bottom:6px;padding-left:2px}
   .sig-bar-bg{height:5px;background:#21262d;border-radius:3px;overflow:hidden}
   .sig-bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
 
@@ -76,6 +77,17 @@
   .trade-item.green .trade-val{color:#00e676}
   .trade-item.red .trade-val{color:#ff5252}
   .trade-note{font-size:.78rem;color:#8b949e;margin-top:8px;text-align:center}
+
+  /* ── Trailing stop box ── */
+  .trailing-box{background:#0f1822;border:1px solid #ffd74033;border-radius:12px;padding:20px;margin-bottom:16px}
+  .ts-phase{font-size:1rem;font-weight:700;margin-bottom:14px;letter-spacing:.3px}
+  .ts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+  @media(max-width:600px){.ts-grid{grid-template-columns:repeat(2,1fr)}}
+  .ts-item{background:#ffffff08;border-radius:8px;padding:10px;text-align:center}
+  .ts-lbl{font-size:.72rem;color:#8b949e;margin-bottom:4px}
+  .ts-val{font-size:1.05rem;font-weight:700;color:#e6edf3}
+  .ts-action{font-size:.83rem;color:#c9d1d9;background:#ffffff06;border-radius:6px;
+              padding:10px 12px;border-left:3px solid #ffd740;line-height:1.5}
 
   /* ── Alert / blocked ── */
   .alert-box{background:#3d1a0011;border:1px solid #ffab4044;border-radius:10px;
@@ -106,6 +118,37 @@
   /* ── Footer ── */
   .footer{text-align:center;font-size:.78rem;color:#484f58;margin-top:24px;padding-bottom:8px}
 
+  /* ── Correlation monitor ── */
+  .corr-card{background:#161b22;border:1px solid #30363d;border-radius:12px;
+              padding:20px 24px;margin-bottom:20px}
+  .corr-header,.corr-row{display:grid;grid-template-columns:1.8fr .8fr .8fr 1.4fr 1.6fr;
+                           gap:8px;align-items:center;padding:6px 0;
+                           border-bottom:1px solid #21262d;font-size:.83rem}
+  .corr-header{border-bottom:2px solid #30363d;padding-bottom:8px;margin-bottom:4px}
+  .corr-row:last-of-type{border-bottom:none}
+  .corr-pair{font-weight:600;color:#c9d1d9;font-size:.82rem}
+  .corr-val{text-align:center;font-weight:700;font-size:.88rem;font-family:monospace}
+  .corr-val.dim{color:#8b949e;font-weight:400}
+  .corr-band{text-align:center;font-size:.75rem;color:#8b949e}
+  .corr-status{font-size:.78rem;color:#c9d1d9}
+  .corr-section-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;
+                        color:#484f58;margin:12px 0 6px;padding-top:8px;
+                        border-top:1px solid #21262d}
+  .break-row{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #21262d;
+              align-items:flex-start;font-size:.82rem}
+  .break-row:last-child{border-bottom:none}
+  .break-pair{font-weight:700;white-space:nowrap;min-width:90px;padding-top:1px}
+  .break-note{color:#8b949e;line-height:1.4;flex:1}
+  .break-ok{font-size:.84rem;color:#00e676;padding:6px 0}
+  .alert-badge{display:flex;gap:12px;align-items:flex-start;padding:8px 12px;
+                border:1px solid #30363d;border-radius:8px;margin-bottom:8px;
+                background:#ffffff05}
+  .alert-badge:last-child{margin-bottom:0}
+  @media(max-width:620px){
+    .corr-header,.corr-row{grid-template-columns:1fr 1fr;}
+    .corr-band,.corr-val.dim{display:none}
+  }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#0d1117}
   ::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
@@ -122,7 +165,7 @@
     </div>
     <div>
       <div class="etf-badge">GOLDBEES.NS</div>
-      <div class="ts">Last run: 2026-04-04 09:36:40</div>
+      <div class="ts">Last run: 2026-04-04 23:10:51</div>
     </div>
   </div>
 
@@ -140,6 +183,95 @@
   <!-- TRADE PARAMS -->
   
 
+  <!-- TRAILING STOP -->
+  
+
+  <!-- CORRELATION MONITOR (Signal 12) -->
+  
+      <div class="corr-card">
+        <div class="section-title" style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          📡 Correlation Monitor
+          <span style="font-size:.78rem;padding:3px 8px;border-radius:4px;background:#ffd74022;color:#ffd740;font-weight:700">NON-TRADING DAY</span>
+          <span style="font-size:.75rem;color:#8b949e;margin-left:auto">Confidence: HIGH</span>
+        </div>
+        <div class="corr-header">
+          <span class="corr-pair" style="color:#8b949e">Pair</span>
+          <span class="corr-val" style="color:#8b949e">20d r</span>
+          <span class="corr-val" style="color:#8b949e">10d r</span>
+          <span class="corr-band" style="color:#8b949e">Normal Band</span>
+          <span class="corr-status" style="color:#8b949e">Status</span>
+        </div>
+        
+            <div class="corr-row">
+              <span class="corr-pair">GOLDBEES ↔ COMEX</span>
+              <span class="corr-val" style="color:#ff5252">+0.663</span>
+              <span class="corr-val dim">N/A</span>
+              <span class="corr-band">+0.85 to +0.99</span>
+              <span class="corr-status">🔴 BREAK<span style="font-size:.68rem;padding:1px 5px;border-radius:3px;background:#00e67622;color:#00e676;margin-left:4px">BULLISH</span></span>
+            </div>
+            <div class="corr-row">
+              <span class="corr-pair">GOLDBEES ↔ DXY</span>
+              <span class="corr-val" style="color:#ff5252">+0.547</span>
+              <span class="corr-val dim">N/A</span>
+              <span class="corr-band">-0.40 to -0.80</span>
+              <span class="corr-status">🔴 BREAK<span style="font-size:.68rem;padding:1px 5px;border-radius:3px;background:#00e67622;color:#00e676;margin-left:4px">BULLISH</span></span>
+            </div>
+            <div class="corr-row">
+              <span class="corr-pair">GOLDBEES ↔ USDINR</span>
+              <span class="corr-val" style="color:#ff5252">-0.286</span>
+              <span class="corr-val dim">N/A</span>
+              <span class="corr-band">+0.30 to +0.70</span>
+              <span class="corr-status">🔴 BREAK<span style="font-size:.68rem;padding:1px 5px;border-radius:3px;background:#00e67622;color:#00e676;margin-left:4px">BULLISH</span></span>
+            </div>
+            <div class="corr-row">
+              <span class="corr-pair">GOLDBEES ↔ NIFTY</span>
+              <span class="corr-val" style="color:#ff5252">+0.557</span>
+              <span class="corr-val dim">N/A</span>
+              <span class="corr-band">-0.10 to -0.30</span>
+              <span class="corr-status">🔴 BREAK<span style="font-size:.68rem;padding:1px 5px;border-radius:3px;background:#ff525222;color:#ff5252;margin-left:4px">BEARISH</span></span>
+            </div>
+        <div class="corr-section-title">CORRELATION BREAKS</div>
+        
+            <div class="break-row">
+              <span class="break-pair" style="color:#00e676">↑ COMEX</span>
+              <span class="break-note">BREAK (r=0.66) — GOLDBEES lagging COMEX rally. COMEX +6.3% but GOLDBEES only +4.4%. ARBITRAGE WINDOW — GOLDBEES may catc</span>
+            </div>
+            <div class="break-row">
+              <span class="break-pair" style="color:#00e676">↑ DXY</span>
+              <span class="break-note">BREAK (r=0.55) — Gold AND Dollar rising together. CRISIS GOLD signal: flight-to-safety overriding normal inverse. GOLDBE</span>
+            </div>
+            <div class="break-row">
+              <span class="break-pair" style="color:#00e676">↑ USDINR</span>
+              <span class="break-note">BREAK (r=-0.29) — GOLDBEES rising despite STRONG RUPEE. SILENT BULL: global COMEX demand overwhelming FX tailwind. GOLDB</span>
+            </div>
+            <div class="break-row">
+              <span class="break-pair" style="color:#ff5252">↓ NIFTY</span>
+              <span class="break-note">BREAK (r=0.56) — GOLDBEES and Nifty co-moving UP. LIQUIDITY TRAP: easy-money rally, not true gold demand. Gold rise may </span>
+            </div>
+        <div class='corr-section-title'>COMPOUND ALERTS</div>
+            <div class="alert-badge" style="border-color:#ff525244">
+              <span style="font-size:1.1rem">⚡</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;color:#ff5252">ARBITRAGE WINDOW</div>
+                <div style="font-size:.75rem;color:#8b949e">GOLDBEES-COMEX correlation broken (r=0.66) AND GOLDBEES trading at -13.0% vs COMEX fair value. GOLDBEES is lagging COMEX</div>
+              </div>
+            </div>
+            <div class="alert-badge" style="border-color:#ffd74044">
+              <span style="font-size:1.1rem">⚠️</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;color:#ffd740">LIQUIDITY TRAP</div>
+                <div style="font-size:.75rem;color:#8b949e">GOLDBEES and Nifty both rising together (r=0.56). This is a LIQUIDITY RALLY, not fundamental gold demand. Gold rise may </div>
+              </div>
+            </div>
+            <div class="alert-badge" style="border-color:#ff525244">
+              <span style="font-size:1.1rem">📈</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;color:#ff5252">SILENT BULL</div>
+                <div style="font-size:.75rem;color:#8b949e">GOLDBEES rising (4.4% over 5d) despite rupee NOT weakening (USDINR corr=-0.29). COMEX up 6.3% — global demand overwhelmi</div>
+              </div>
+            </div>
+      </div>
+
   <div class="grid-2">
     <!-- LEFT: GAUGE + SCORE SUMMARY -->
     <div>
@@ -153,42 +285,45 @@
               <!-- score arc -->
               <path d="M10,100 A90,90 0 0,1 190,100" fill="none" stroke="#ffab40" stroke-width="16"
                     stroke-linecap="round"
-                    stroke-dasharray="70.8 283"/>
+                    stroke-dasharray="59.7 283"/>
               <!-- needle -->
-              <line x1="100" y1="100"
-                    x2="50.5"
-                    y2="50.5"
+              <line x1="100" y1="100" x2="44.8" y2="56.9"
                     stroke="#ffd740" stroke-width="2.5" stroke-linecap="round"/>
               <circle cx="100" cy="100" r="5" fill="#ffd740"/>
             </svg>
-            <div class="gauge-number">20<span class="gauge-max">/80</span></div>
+            <div class="gauge-number">20<span class="gauge-max">/95</span></div>
           </div>
         </div>
-        <div class="zone-bar"><div class="zone-seg" style="width:19%;background:#ff5252" title="No Trade"></div><div class="zone-seg" style="width:19%;background:#ffab40" title="Wait"></div><div class="zone-seg" style="width:19%;background:#ffd740" title="Watch"></div><div class="zone-seg" style="width:19%;background:#69f0ae" title="Buy"></div><div class="zone-seg" style="width:25%;background:#00e676" title="Strong Buy"></div></div>
+        <div class="zone-bar"><div class="zone-seg" style="width:16%;background:#ff5252" title="No Trade"></div><div class="zone-seg" style="width:16%;background:#ffab40" title="Wait"></div><div class="zone-seg" style="width:16%;background:#ffd740" title="Watch"></div><div class="zone-seg" style="width:16%;background:#69f0ae" title="Buy"></div><div class="zone-seg" style="width:37%;background:#00e676" title="Strong Buy"></div></div>
         
       <div class="thresh-row">
-        <span>0</span><span>15<br><small>WAIT</small></span>
+        <span>0</span>
+        <span>15<br><small>WAIT</small></span>
         <span>30<br><small>WATCH</small></span>
         <span>45<br><small>BUY</small></span>
         <span>60<br><small>STR BUY</small></span>
-        <span>80</span>
+        <span>95</span>
       </div>
         
       <div class="score-summary">
-        <div class="score-row"><span>Raw Score</span><span>39.0 / 80</span></div>
+        <div class="score-row"><span>Raw Score</span><span>51.0 / 95</span></div>
         <div class="score-row"><span>S07 Penalty</span><span style="color:#ffab40">-0.0 pts</span></div>
-        <div class="score-row bold"><span>Final Score</span><span style="color:#ffab40">20.0 / 80</span></div>
-        <div class="score-row"><span>Normalized</span><span>25.0%</span></div>
+        <div class="score-row bold"><span>Final Score</span><span style="color:#ffab40">20.0 / 95</span></div>
+        <div class="score-row"><span>Normalized</span><span>21.1%</span></div>
       </div>
       </div>
       
       <div class="guide-box">
-        <div class="section-title">Score Guide</div>
+        <div class="section-title">Score Guide (out of 95)</div>
         <div class="guide-row"><span class="dot" style="background:#00e676"></span><span>&ge;60 — STRONG BUY</span></div>
         <div class="guide-row"><span class="dot" style="background:#69f0ae"></span><span>&ge;45 — BUY</span></div>
         <div class="guide-row"><span class="dot" style="background:#ffd740"></span><span>&ge;30 — WATCH</span></div>
         <div class="guide-row"><span class="dot" style="background:#ffab40"></span><span>&ge;15 — WAIT</span></div>
         <div class="guide-row"><span class="dot" style="background:#ff5252"></span><span>&lt;15 — DO NOT TRADE</span></div>
+        <div class="guide-row" style="margin-top:10px;padding-top:8px;border-top:1px solid #21262d">
+          <span class="dot" style="background:#546e7a"></span>
+          <span style="color:#8b949e;font-size:.8rem">Max: S01=15 S02=25 S03=5 S04=15 S05=10 S06=10 S09=10 S10=5 S12=8</span>
+        </div>
       </div>
     </div>
 
@@ -203,6 +338,7 @@
             <span class="sig-label">Buy the Dip</span>
             <span class="sig-pts" style="color:#ffab40">5<span class="sig-max">/15</span></span>
           </div>
+          
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:33%;background:#ffab40"></div>
           </div>
@@ -213,6 +349,7 @@
             <span class="sig-label">Macro Trigger</span>
             <span class="sig-pts" style="color:#00e676">22<span class="sig-max">/25</span></span>
           </div>
+          
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:88%;background:#00e676"></div>
           </div>
@@ -223,6 +360,7 @@
             <span class="sig-label">Seasonality</span>
             <span class="sig-pts" style="color:#00e676">5<span class="sig-max">/5</span></span>
           </div>
+          
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:100%;background:#00e676"></div>
           </div>
@@ -233,6 +371,7 @@
             <span class="sig-label">Bollinger Bands</span>
             <span class="sig-pts" style="color:#546e7a">0<span class="sig-max">/15</span></span>
           </div>
+          
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:0%;background:#546e7a"></div>
           </div>
@@ -243,6 +382,7 @@
             <span class="sig-label">2026 Outlook</span>
             <span class="sig-pts" style="color:#ffd740">7<span class="sig-max">/10</span></span>
           </div>
+          
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:70%;background:#ffd740"></div>
           </div>
@@ -253,6 +393,40 @@
             <span class="sig-label">Weekly Routine</span>
             <span class="sig-pts" style="color:#546e7a">0<span class="sig-max">/10</span></span>
           </div>
+          
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:0%;background:#546e7a"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S09</span>
+            <span class="sig-label">Volume Confirm</span>
+            <span class="sig-pts" style="color:#ffd740">7<span class="sig-max">/10</span></span>
+          </div>
+          
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:70%;background:#ffd740"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S10</span>
+            <span class="sig-label">MCX–COMEX Spread</span>
+            <span class="sig-pts" style="color:#00e676">5<span class="sig-max">/5</span></span>
+          </div>
+          
+          <div class="sig-bar-bg">
+            <div class="sig-bar-fill" style="width:100%;background:#00e676"></div>
+          </div>
+        </div>
+        <div class="sig-card">
+          <div class="sig-header">
+            <span class="sig-code">S12</span>
+            <span class="sig-label">Correlation Break</span>
+            <span class="sig-pts" style="color:#546e7a">0<span class="sig-max">/8</span></span>
+          </div>
+          
           <div class="sig-bar-bg">
             <div class="sig-bar-fill" style="width:0%;background:#546e7a"></div>
           </div>
@@ -262,7 +436,7 @@
           <div class="sig-header">
             <span class="sig-code">S07</span>
             <span class="sig-label">Risk Gate Penalty</span>
-            <span class="sig-pts" style="color:#546e7a">-0<span class="sig-max">/80</span></span>
+            <span class="sig-pts" style="color:#546e7a">-0<span class="sig-max">/95</span></span>
           </div>
         </div>
       </div>
@@ -277,7 +451,8 @@
     <div class="info-row"><span class="info-key">Stop Loss</span><span class="info-val" style="color:#ff5252">-1.0%</span></div>
     <div class="info-row"><span class="info-key">Hold Period</span><span class="info-val">1–5 trading days</span></div>
     <div class="info-row"><span class="info-key">Transaction Cost</span><span class="info-val">~0.755% round-trip</span></div>
-    <div class="info-row"><span class="info-key">Run At</span><span class="info-val">2026-04-04 09:36:40</span></div>
+    <div class="info-row"><span class="info-key">Max Score</span><span class="info-val">95 pts (9 signals + S12)</span></div>
+    <div class="info-row"><span class="info-key">Run At</span><span class="info-val">2026-04-04 23:10:51</span></div>
   </div>
 
   <!-- REFRESH -->

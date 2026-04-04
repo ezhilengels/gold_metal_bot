@@ -397,6 +397,8 @@ def fetch_o4_dxy_trend() -> dict:
         if df is None or len(df) < 12:
             raise ValueError("Insufficient DXY data rows")
 
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
         closes = df["Close"].dropna()
         if len(closes) < 12:
             raise ValueError("Insufficient DXY close prices")

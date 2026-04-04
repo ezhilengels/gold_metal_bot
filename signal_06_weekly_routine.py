@@ -126,6 +126,8 @@ def fetch_comex_trend() -> dict:
         if df is None or len(df) < 7:
             raise ValueError("Insufficient COMEX data rows")
 
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
         closes = df["Close"].dropna()
         if len(closes) < 7:
             raise ValueError("Insufficient COMEX close prices")
@@ -199,6 +201,8 @@ def fetch_dxy_trend() -> dict:
         if df is None or len(df) < 7:
             raise ValueError("Insufficient DXY data rows")
 
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
         closes = df["Close"].dropna()
         if len(closes) < 7:
             raise ValueError("Insufficient DXY close prices")

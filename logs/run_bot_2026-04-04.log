@@ -1,0 +1,324 @@
+2026-04-04 15:41:55,484 [RUN_BOT] Run record saved to run_history.json (1 total entries)
+2026-04-04 15:41:55,485 [RUN_BOT] Run record saved to run_history.json (2 total entries)
+2026-04-04 23:04:29,904 [RUN_BOT] ────────────────────────────────────────────────────────────
+2026-04-04 23:04:29,905 [RUN_BOT] BOT RUN — START
+2026-04-04 23:04:29,905 [RUN_BOT] dry_run=True  open_browser=True
+2026-04-04 23:04:29,994 [RUN_BOT] ============================================================
+2026-04-04 23:04:29,994 [RUN_BOT] SIGNAL 08 — FINAL VERDICT — START
+2026-04-04 23:04:29,994 [RUN_BOT] ============================================================
+2026-04-04 23:04:29,994 [RUN_BOT] Running Signal 07 (Avoid / Risk Gate)...
+2026-04-04 23:04:30,562 [RUN_BOT] ============================================================
+2026-04-04 23:04:30,562 [RUN_BOT] SIGNAL 07 — AVOID SIGNAL (RISK FILTER) — START
+2026-04-04 23:04:30,562 [RUN_BOT] ============================================================
+2026-04-04 23:04:30,562 [RUN_BOT] Running Check A1: Single-Day Move Guard...
+2026-04-04 23:04:30,562 [RUN_BOT] A1: Checking single-day price move...
+2026-04-04 23:04:32,148 [RUN_BOT] A1: GOLDBEES change = -2.261%  (₹123.37 → ₹120.58)
+2026-04-04 23:04:32,437 [RUN_BOT] A1: COMEX Gold change = -2.753%
+2026-04-04 23:04:32,437 [RUN_BOT] A1 verdict: CLEAR | A1 ✅ NORMAL MOVE — GOLDBEES -2.26% today. No chase risk.
+2026-04-04 23:04:32,437 [RUN_BOT] Running Check A2: Economic Event Calendar...
+2026-04-04 23:04:32,437 [RUN_BOT] A2: Checking economic event calendar...
+2026-04-04 23:04:32,437 [RUN_BOT] A2 Calendar: 0 extreme in 24h, 0 high in 24h, 0 extreme in 24–48h
+2026-04-04 23:04:32,777 [RUN_BOT] A2 verdict: CLEAR | A2 ✅ CLEAR — No major US economic events in next 48 hours
+2026-04-04 23:04:32,778 [RUN_BOT] Running Check A3: Transaction Cost Check...
+2026-04-04 23:04:32,778 [RUN_BOT] A3: Checking transaction cost viability...
+2026-04-04 23:04:32,778 [RUN_BOT] A3: Target=3.0% | Total costs=0.755% | Net profit=2.245%
+2026-04-04 23:04:32,778 [RUN_BOT] A3 verdict: CLEAR | A3 ✅ VIABLE — Net 2.245% profit after 0.755% total costs
+2026-04-04 23:04:32,778 [RUN_BOT] SIGNAL 07 VERDICT: CLEAR | A1=CLEAR | A2=CLEAR | A3=CLEAR
+2026-04-04 23:04:32,778 [RUN_BOT] SIGNAL 07 — AVOID SIGNAL — END
+2026-04-04 23:04:32,778 [RUN_BOT] Running Signal 01 (Buy the Dip)...
+2026-04-04 23:04:32,782 [RUN_BOT] ============================================================
+2026-04-04 23:04:32,782 [RUN_BOT] SIGNAL 01 — BUY THE DIP — START
+2026-04-04 23:04:32,782 [RUN_BOT] ============================================================
+2026-04-04 23:04:32,782 [RUN_BOT] Fetching GOLDBEES.NS — last 35 days...
+2026-04-04 23:04:33,028 [RUN_BOT] Fetched 35 rows for GOLDBEES.NS. Latest: 2026-04-02 close=₹120.58
+2026-04-04 23:04:33,032 [RUN_BOT] Indicators: price=₹120.58, RSI=43.99, MA20=₹125.50, SwingHigh=₹128.07 (2026-03-18), PrevLow=₹123.02
+2026-04-04 23:04:33,032 [RUN_BOT] Scores: A=0.5 B=0.5 C=1.0 D=0.0 Total=2.0/4.0
+2026-04-04 23:04:33,032 [RUN_BOT] VERDICT: WATCH | Confidence: LOW | Score: 2.0
+2026-04-04 23:04:33,033 [RUN_BOT] SIGNAL 01 — BUY THE DIP — END
+2026-04-04 23:04:33,033 [RUN_BOT] Running Signal 02 (Macro Trigger)...
+2026-04-04 23:04:33,034 [RUN_BOT] ============================================================
+2026-04-04 23:04:33,034 [RUN_BOT] SIGNAL 02 — MACRO TRIGGER — START
+2026-04-04 23:04:33,034 [RUN_BOT] ============================================================
+2026-04-04 23:04:33,034 [RUN_BOT] Evaluating Factor 1: DXY...
+2026-04-04 23:04:33,034 [RUN_BOT] Fetching DX-Y.NYB for last 12 days...
+2026-04-04 23:04:33,367 [RUN_BOT] Fetched 11 rows for DX-Y.NYB. Latest: 2026-04-03
+2026-04-04 23:04:33,368 [RUN_BOT] F1-DXY ➡️  DXY FLAT 0.04% over 5 days (DXY=100.186). No directional pressure.
+2026-04-04 23:04:33,368 [RUN_BOT] Evaluating Factor 2: Fed Stance...
+2026-04-04 23:04:33,368 [RUN_BOT] Fetching FRED series: FEDFUNDS
+2026-04-04 23:04:34,193 [RUN_BOT] FRED FEDFUNDS: 9 observations. Latest: 2026-03-01 = 3.64
+2026-04-04 23:04:34,194 [RUN_BOT] Fed rate now=3.64%, 3m_ago=3.72%, trend=PAUSED
+2026-04-04 23:04:34,194 [RUN_BOT] Fetching news: 10 keywords, last 14 days
+2026-04-04 23:04:34,920 [RUN_BOT] NewsAPI returned 97 articles
+2026-04-04 23:04:34,921 [RUN_BOT] Fed news: dovish=16, hawkish=6, sentiment=DOVISH
+2026-04-04 23:04:34,922 [RUN_BOT] F2-FED ✅ FED STRONGLY DOVISH — Rate PAUSED (now=3.64%) AND news dovish (16 articles). BULLISH FOR GOLD.
+2026-04-04 23:04:34,922 [RUN_BOT] Evaluating Factor 3: CPI Inflation...
+2026-04-04 23:04:34,922 [RUN_BOT] Fetching FRED series: CPIAUCSL
+2026-04-04 23:04:35,328 [RUN_BOT] FRED CPIAUCSL: 4 observations. Latest: 2026-02-01 = 327.46
+2026-04-04 23:04:35,329 [RUN_BOT] F3-CPI ✅ INFLATION RISING — CPI +0.267% MoM (CPI=327.460) ⚠️ DATA IS 62 DAYS OLD (CPI is monthly). BULLISH FOR GOLD.
+2026-04-04 23:04:35,329 [RUN_BOT] Evaluating Factor 4: Geopolitical Tension...
+2026-04-04 23:04:35,329 [RUN_BOT] Fetching news: 14 keywords, last 2 days
+2026-04-04 23:04:36,020 [RUN_BOT] NewsAPI returned 97 articles
+2026-04-04 23:04:36,021 [RUN_BOT] F4-GEO ✅ GEOPOLITICAL TENSION HIGH — score=75 (high_severity=35, medium=5). SAFE-HAVEN GOLD DEMAND. Top: "Biden Judge's Leniency for Sex Offenders Brings Scrutiny to Lindsey Graham's Confirmation Votes"
+2026-04-04 23:04:36,021 [RUN_BOT] Evaluating Factor 5: INR/USD Rate...
+2026-04-04 23:04:36,021 [RUN_BOT] Fetching USDINR=X for last 12 days...
+2026-04-04 23:04:36,264 [RUN_BOT] Fetched 13 rows for USDINR=X. Latest: 2026-04-04
+2026-04-04 23:04:36,265 [RUN_BOT] F5-INR ❌ INR STRENGTHENING — USD/INR fell -2.228% over 5 days (now ₹92.6700). Reduces Indian gold ETF gains.
+2026-04-04 23:04:36,265 [RUN_BOT] Fetching EOD price for GOLDBEES.NS...
+2026-04-04 23:04:36,265 [RUN_BOT] Fetching GOLDBEES.NS for last 3 days...
+2026-04-04 23:04:36,538 [RUN_BOT] Fetched 3 rows for GOLDBEES.NS. Latest: 2026-04-02
+2026-04-04 23:04:36,538 [RUN_BOT] GOLDBEES.NS latest close: ₹120.58000183105469
+2026-04-04 23:04:36,538 [RUN_BOT] Generating final verdict...
+2026-04-04 23:04:36,539 [RUN_BOT] SIGNAL 02 VERDICT: STRONG BUY | Confidence: HIGH
+2026-04-04 23:04:36,539 [RUN_BOT] SIGNAL 02 — MACRO TRIGGER — END
+2026-04-04 23:04:36,539 [RUN_BOT] Running Signal 04 (Bollinger Bands)...
+2026-04-04 23:04:36,541 [RUN_BOT] ============================================================
+2026-04-04 23:04:36,541 [RUN_BOT] SIGNAL 04 — BOLLINGER BANDS — START
+2026-04-04 23:04:36,541 [RUN_BOT] ============================================================
+2026-04-04 23:04:36,541 [RUN_BOT] Fetching GOLDBEES.NS — last 40 days...
+2026-04-04 23:04:36,786 [RUN_BOT] Fetched 40 rows. Latest: 2026-04-02  close=₹120.58
+2026-04-04 23:04:36,787 [RUN_BOT] BB: MB=₹125.4965 | UB=₹138.6803 | LB=₹112.3127 | %B=0.3135 | BW=21.0106% | Price=₹120.58
+2026-04-04 23:04:36,787 [RUN_BOT] Market state: STRONG TREND | BB reliability: LOW
+2026-04-04 23:04:36,787 [RUN_BOT] Zone: MID_BAND | %B=0.3135
+2026-04-04 23:04:36,787 [RUN_BOT] VERDICT: WAIT | Confidence: NONE
+2026-04-04 23:04:36,787 [RUN_BOT] SIGNAL 04 — BOLLINGER BANDS — END
+2026-04-04 23:04:36,787 [RUN_BOT] Running Signal 03 (Seasonality)...
+2026-04-04 23:04:36,789 [RUN_BOT] ============================================================
+2026-04-04 23:04:36,789 [RUN_BOT] SIGNAL 03 — SEASONALITY PLAY — START
+2026-04-04 23:04:36,789 [RUN_BOT] ============================================================
+2026-04-04 23:04:36,789 [RUN_BOT] Date: 2026-04-04 | Month: April | Day: 4
+2026-04-04 23:04:36,789 [RUN_BOT] Season: AKSHAYA_TRITIYA_BUILDUP | Demand: VERY_HIGH
+2026-04-04 23:04:36,789 [RUN_BOT] Signal: BUY / BUILD | Strength: BUILDING PHASE | Score: 5/5
+2026-04-04 23:04:36,789 [RUN_BOT] Upcoming event: ⚡ UPCOMING: Akshaya Tritiya in ~16 day(s) (20 Apr 2026) — demand spike expected
+2026-04-04 23:04:36,789 [RUN_BOT] FINAL: BUY / BUILD | Score: 5/5 | Confidence: HIGH
+2026-04-04 23:04:36,789 [RUN_BOT] SIGNAL 03 — SEASONALITY PLAY — END
+2026-04-04 23:04:36,789 [RUN_BOT] Running Signal 05 (2026 Outlook)...
+2026-04-04 23:04:36,790 [RUN_BOT] ============================================================
+2026-04-04 23:04:36,790 [RUN_BOT] SIGNAL 05 — 2026 GOLD OUTLOOK — START
+2026-04-04 23:04:36,790 [RUN_BOT] ============================================================
+2026-04-04 23:04:36,790 [RUN_BOT] Fetching O1 (Geopolitical tension via NewsAPI)...
+2026-04-04 23:04:37,266 [RUN_BOT] O1: fetched 94 articles from NewsAPI (30 days)
+2026-04-04 23:04:37,267 [RUN_BOT] O1: high_articles=30, medium_articles=10, tension_score=70
+2026-04-04 23:04:37,267 [RUN_BOT] O1: available=True | score=2.0 | bias=STRONGLY BULLISH
+2026-04-04 23:04:37,267 [RUN_BOT] Fetching O2 (Central bank buying via WGC/news)...
+2026-04-04 23:04:37,589 [RUN_BOT] O2: found 6 WGC articles via NewsAPI
+2026-04-04 23:04:37,589 [RUN_BOT] O2 fetch failed: Could not parse tonne figures from WGC articles
+2026-04-04 23:04:37,589 [RUN_BOT] O2: available=False | score=0.0 | bias=UNKNOWN
+2026-04-04 23:04:37,589 [RUN_BOT] Fetching O3 (Fed rates via FRED FEDFUNDS)...
+2026-04-04 23:04:38,699 [RUN_BOT] O3: FEDFUNDS current=3.64% | 6M_ago=4.22% | 12M_ago=4.33% | 6M_change=-0.58% | 12M_change=-0.69%
+2026-04-04 23:04:38,700 [RUN_BOT] O3: available=True | score=2.0 | bias=STRONGLY BULLISH
+2026-04-04 23:04:38,700 [RUN_BOT] Fetching O4 (DXY 30-day via Yahoo Finance)...
+2026-04-04 23:04:39,400 [RUN_BOT] O4: DXY=100.186 | 30d_change=+2.44% | 10d_change=+0.54%
+2026-04-04 23:04:39,400 [RUN_BOT] O4: available=True | score=0.0 | bias=BEARISH
+2026-04-04 23:04:39,400 [RUN_BOT] Fetching O5 (NFP via FRED PAYEMS)...
+2026-04-04 23:04:39,799 [RUN_BOT] O5: PAYEMS latest=178,000 jobs | prev=-133,000 | data_date=2026-03-01 | days_old=34
+2026-04-04 23:04:39,799 [RUN_BOT] O5: available=True | score=0.5 | bias=NEUTRAL
+2026-04-04 23:04:39,799 [RUN_BOT] Calculating final 2026 outlook...
+2026-04-04 23:04:39,799 [RUN_BOT] Outlook calc: available=4/5 | score=4.5 / max_possible=7.0
+2026-04-04 23:04:39,799 [RUN_BOT] Normalized: 64.3%
+2026-04-04 23:04:39,799 [RUN_BOT] FINAL: BULLISH | Score: 4.5/7.0 | Normalized: 64.3% | Available: 4/5 | Confidence: MEDIUM
+2026-04-04 23:04:39,799 [RUN_BOT] SIGNAL 05 — 2026 GOLD OUTLOOK — END
+2026-04-04 23:04:39,800 [RUN_BOT] Running Signal 06 (Weekly Routine)...
+2026-04-04 23:04:39,801 [RUN_BOT] ============================================================
+2026-04-04 23:04:39,801 [RUN_BOT] SIGNAL 06 — WEEKLY ROUTINE — START
+2026-04-04 23:04:39,801 [RUN_BOT] ============================================================
+2026-04-04 23:04:39,801 [RUN_BOT] Day gate: Saturday (dow=5) | active=False
+2026-04-04 23:04:39,801 [RUN_BOT] Non-trading day — signal inactive
+2026-04-04 23:04:39,801 [RUN_BOT] Running Signal 09 (Volume Confirmation)...
+2026-04-04 23:04:39,805 [RUN_BOT] ============================================================
+2026-04-04 23:04:39,805 [RUN_BOT] SIGNAL 09 — VOLUME CONFIRMATION — START
+2026-04-04 23:04:39,805 [RUN_BOT] ============================================================
+2026-04-04 23:04:39,805 [RUN_BOT] Fetching GOLDBEES OHLCV data...
+2026-04-04 23:04:40,472 [RUN_BOT] Fetched 35 days of GOLDBEES.NS OHLCV data
+2026-04-04 23:04:40,472 [RUN_BOT] Checking V1 (volume level)...
+2026-04-04 23:10:51,354 [RUN_BOT] ────────────────────────────────────────────────────────────
+2026-04-04 23:10:51,355 [RUN_BOT] BOT RUN — START
+2026-04-04 23:10:51,355 [RUN_BOT] dry_run=True  open_browser=True
+2026-04-04 23:10:51,436 [RUN_BOT] ============================================================
+2026-04-04 23:10:51,436 [RUN_BOT] SIGNAL 08 — FINAL VERDICT — START
+2026-04-04 23:10:51,436 [RUN_BOT] ============================================================
+2026-04-04 23:10:51,436 [RUN_BOT] Running Signal 07 (Avoid / Risk Gate)...
+2026-04-04 23:10:51,985 [RUN_BOT] ============================================================
+2026-04-04 23:10:51,985 [RUN_BOT] SIGNAL 07 — AVOID SIGNAL (RISK FILTER) — START
+2026-04-04 23:10:51,985 [RUN_BOT] ============================================================
+2026-04-04 23:10:51,985 [RUN_BOT] Running Check A1: Single-Day Move Guard...
+2026-04-04 23:10:51,985 [RUN_BOT] A1: Checking single-day price move...
+2026-04-04 23:10:53,596 [RUN_BOT] A1: GOLDBEES change = -2.261%  (₹123.37 → ₹120.58)
+2026-04-04 23:10:53,893 [RUN_BOT] A1: COMEX Gold change = -2.753%
+2026-04-04 23:10:53,893 [RUN_BOT] A1 verdict: CLEAR | A1 ✅ NORMAL MOVE — GOLDBEES -2.26% today. No chase risk.
+2026-04-04 23:10:53,893 [RUN_BOT] Running Check A2: Economic Event Calendar...
+2026-04-04 23:10:53,893 [RUN_BOT] A2: Checking economic event calendar...
+2026-04-04 23:10:53,894 [RUN_BOT] A2 Calendar: 0 extreme in 24h, 0 high in 24h, 0 extreme in 24–48h
+2026-04-04 23:10:54,286 [RUN_BOT] A2 verdict: CLEAR | A2 ✅ CLEAR — No major US economic events in next 48 hours
+2026-04-04 23:10:54,287 [RUN_BOT] Running Check A3: Transaction Cost Check...
+2026-04-04 23:10:54,287 [RUN_BOT] A3: Checking transaction cost viability...
+2026-04-04 23:10:54,287 [RUN_BOT] A3: Target=3.0% | Total costs=0.755% | Net profit=2.245%
+2026-04-04 23:10:54,287 [RUN_BOT] A3 verdict: CLEAR | A3 ✅ VIABLE — Net 2.245% profit after 0.755% total costs
+2026-04-04 23:10:54,288 [RUN_BOT] SIGNAL 07 VERDICT: CLEAR | A1=CLEAR | A2=CLEAR | A3=CLEAR
+2026-04-04 23:10:54,288 [RUN_BOT] SIGNAL 07 — AVOID SIGNAL — END
+2026-04-04 23:10:54,288 [RUN_BOT] Running Signal 01 (Buy the Dip)...
+2026-04-04 23:10:54,292 [RUN_BOT] ============================================================
+2026-04-04 23:10:54,292 [RUN_BOT] SIGNAL 01 — BUY THE DIP — START
+2026-04-04 23:10:54,293 [RUN_BOT] ============================================================
+2026-04-04 23:10:54,293 [RUN_BOT] Fetching GOLDBEES.NS — last 35 days...
+2026-04-04 23:10:54,542 [RUN_BOT] Fetched 35 rows for GOLDBEES.NS. Latest: 2026-04-02 close=₹120.58
+2026-04-04 23:10:54,547 [RUN_BOT] Indicators: price=₹120.58, RSI=43.99, MA20=₹125.50, SwingHigh=₹128.07 (2026-03-18), PrevLow=₹123.02
+2026-04-04 23:10:54,547 [RUN_BOT] Scores: A=0.5 B=0.5 C=1.0 D=0.0 Total=2.0/4.0
+2026-04-04 23:10:54,547 [RUN_BOT] VERDICT: WATCH | Confidence: LOW | Score: 2.0
+2026-04-04 23:10:54,547 [RUN_BOT] SIGNAL 01 — BUY THE DIP — END
+2026-04-04 23:10:54,547 [RUN_BOT] Running Signal 02 (Macro Trigger)...
+2026-04-04 23:10:54,550 [RUN_BOT] ============================================================
+2026-04-04 23:10:54,550 [RUN_BOT] SIGNAL 02 — MACRO TRIGGER — START
+2026-04-04 23:10:54,550 [RUN_BOT] ============================================================
+2026-04-04 23:10:54,550 [RUN_BOT] Evaluating Factor 1: DXY...
+2026-04-04 23:10:54,550 [RUN_BOT] Fetching DX-Y.NYB for last 12 days...
+2026-04-04 23:10:54,799 [RUN_BOT] Fetched 11 rows for DX-Y.NYB. Latest: 2026-04-03
+2026-04-04 23:10:54,800 [RUN_BOT] F1-DXY ➡️  DXY FLAT 0.04% over 5 days (DXY=100.186). No directional pressure.
+2026-04-04 23:10:54,800 [RUN_BOT] Evaluating Factor 2: Fed Stance...
+2026-04-04 23:10:54,800 [RUN_BOT] Fetching FRED series: FEDFUNDS
+2026-04-04 23:10:55,526 [RUN_BOT] FRED FEDFUNDS: 9 observations. Latest: 2026-03-01 = 3.64
+2026-04-04 23:10:55,527 [RUN_BOT] Fed rate now=3.64%, 3m_ago=3.72%, trend=PAUSED
+2026-04-04 23:10:55,527 [RUN_BOT] Fetching news: 10 keywords, last 14 days
+2026-04-04 23:10:57,604 [RUN_BOT] NewsAPI returned 97 articles
+2026-04-04 23:10:57,606 [RUN_BOT] Fed news: dovish=16, hawkish=6, sentiment=DOVISH
+2026-04-04 23:10:57,607 [RUN_BOT] F2-FED ✅ FED STRONGLY DOVISH — Rate PAUSED (now=3.64%) AND news dovish (16 articles). BULLISH FOR GOLD.
+2026-04-04 23:10:57,607 [RUN_BOT] Evaluating Factor 3: CPI Inflation...
+2026-04-04 23:10:57,607 [RUN_BOT] Fetching FRED series: CPIAUCSL
+2026-04-04 23:10:58,295 [RUN_BOT] FRED CPIAUCSL: 4 observations. Latest: 2026-02-01 = 327.46
+2026-04-04 23:10:58,296 [RUN_BOT] F3-CPI ✅ INFLATION RISING — CPI +0.267% MoM (CPI=327.460) ⚠️ DATA IS 62 DAYS OLD (CPI is monthly). BULLISH FOR GOLD.
+2026-04-04 23:10:58,296 [RUN_BOT] Evaluating Factor 4: Geopolitical Tension...
+2026-04-04 23:10:58,296 [RUN_BOT] Fetching news: 14 keywords, last 2 days
+2026-04-04 23:10:58,793 [RUN_BOT] NewsAPI returned 95 articles
+2026-04-04 23:10:58,794 [RUN_BOT] F4-GEO ✅ GEOPOLITICAL TENSION HIGH — score=76 (high_severity=35, medium=6). SAFE-HAVEN GOLD DEMAND. Top: "Cambodia parliament approves law to combat cybercrime scam rings"
+2026-04-04 23:10:58,794 [RUN_BOT] Evaluating Factor 5: INR/USD Rate...
+2026-04-04 23:10:58,794 [RUN_BOT] Fetching USDINR=X for last 12 days...
+2026-04-04 23:10:59,110 [RUN_BOT] Fetched 13 rows for USDINR=X. Latest: 2026-04-04
+2026-04-04 23:10:59,110 [RUN_BOT] F5-INR ❌ INR STRENGTHENING — USD/INR fell -2.228% over 5 days (now ₹92.6700). Reduces Indian gold ETF gains.
+2026-04-04 23:10:59,110 [RUN_BOT] Fetching EOD price for GOLDBEES.NS...
+2026-04-04 23:10:59,110 [RUN_BOT] Fetching GOLDBEES.NS for last 3 days...
+2026-04-04 23:10:59,337 [RUN_BOT] Fetched 3 rows for GOLDBEES.NS. Latest: 2026-04-02
+2026-04-04 23:10:59,337 [RUN_BOT] GOLDBEES.NS latest close: ₹120.58000183105469
+2026-04-04 23:10:59,337 [RUN_BOT] Generating final verdict...
+2026-04-04 23:10:59,337 [RUN_BOT] SIGNAL 02 VERDICT: STRONG BUY | Confidence: HIGH
+2026-04-04 23:10:59,337 [RUN_BOT] SIGNAL 02 — MACRO TRIGGER — END
+2026-04-04 23:10:59,337 [RUN_BOT] Running Signal 04 (Bollinger Bands)...
+2026-04-04 23:10:59,340 [RUN_BOT] ============================================================
+2026-04-04 23:10:59,340 [RUN_BOT] SIGNAL 04 — BOLLINGER BANDS — START
+2026-04-04 23:10:59,340 [RUN_BOT] ============================================================
+2026-04-04 23:10:59,340 [RUN_BOT] Fetching GOLDBEES.NS — last 40 days...
+2026-04-04 23:10:59,620 [RUN_BOT] Fetched 40 rows. Latest: 2026-04-02  close=₹120.58
+2026-04-04 23:10:59,620 [RUN_BOT] BB: MB=₹125.4965 | UB=₹138.6803 | LB=₹112.3127 | %B=0.3135 | BW=21.0106% | Price=₹120.58
+2026-04-04 23:10:59,620 [RUN_BOT] Market state: STRONG TREND | BB reliability: LOW
+2026-04-04 23:10:59,620 [RUN_BOT] Zone: MID_BAND | %B=0.3135
+2026-04-04 23:10:59,620 [RUN_BOT] VERDICT: WAIT | Confidence: NONE
+2026-04-04 23:10:59,620 [RUN_BOT] SIGNAL 04 — BOLLINGER BANDS — END
+2026-04-04 23:10:59,620 [RUN_BOT] Running Signal 03 (Seasonality)...
+2026-04-04 23:10:59,623 [RUN_BOT] ============================================================
+2026-04-04 23:10:59,624 [RUN_BOT] SIGNAL 03 — SEASONALITY PLAY — START
+2026-04-04 23:10:59,624 [RUN_BOT] ============================================================
+2026-04-04 23:10:59,624 [RUN_BOT] Date: 2026-04-04 | Month: April | Day: 4
+2026-04-04 23:10:59,624 [RUN_BOT] Season: AKSHAYA_TRITIYA_BUILDUP | Demand: VERY_HIGH
+2026-04-04 23:10:59,624 [RUN_BOT] Signal: BUY / BUILD | Strength: BUILDING PHASE | Score: 5/5
+2026-04-04 23:10:59,624 [RUN_BOT] Upcoming event: ⚡ UPCOMING: Akshaya Tritiya in ~16 day(s) (20 Apr 2026) — demand spike expected
+2026-04-04 23:10:59,624 [RUN_BOT] FINAL: BUY / BUILD | Score: 5/5 | Confidence: HIGH
+2026-04-04 23:10:59,624 [RUN_BOT] SIGNAL 03 — SEASONALITY PLAY — END
+2026-04-04 23:10:59,624 [RUN_BOT] Running Signal 05 (2026 Outlook)...
+2026-04-04 23:10:59,632 [RUN_BOT] ============================================================
+2026-04-04 23:10:59,632 [RUN_BOT] SIGNAL 05 — 2026 GOLD OUTLOOK — START
+2026-04-04 23:10:59,632 [RUN_BOT] ============================================================
+2026-04-04 23:10:59,632 [RUN_BOT] Fetching O1 (Geopolitical tension via NewsAPI)...
+2026-04-04 23:11:00,112 [RUN_BOT] O1: fetched 93 articles from NewsAPI (30 days)
+2026-04-04 23:11:00,113 [RUN_BOT] O1: high_articles=32, medium_articles=12, tension_score=76
+2026-04-04 23:11:00,114 [RUN_BOT] O1: available=True | score=2.0 | bias=STRONGLY BULLISH
+2026-04-04 23:11:00,114 [RUN_BOT] Fetching O2 (Central bank buying via WGC/news)...
+2026-04-04 23:11:00,425 [RUN_BOT] O2: found 6 WGC articles via NewsAPI
+2026-04-04 23:11:00,426 [RUN_BOT] O2 fetch failed: Could not parse tonne figures from WGC articles
+2026-04-04 23:11:00,426 [RUN_BOT] O2: available=False | score=0.0 | bias=UNKNOWN
+2026-04-04 23:11:00,426 [RUN_BOT] Fetching O3 (Fed rates via FRED FEDFUNDS)...
+2026-04-04 23:11:00,895 [RUN_BOT] O3: FEDFUNDS current=3.64% | 6M_ago=4.22% | 12M_ago=4.33% | 6M_change=-0.58% | 12M_change=-0.69%
+2026-04-04 23:11:00,896 [RUN_BOT] O3: available=True | score=2.0 | bias=STRONGLY BULLISH
+2026-04-04 23:11:00,896 [RUN_BOT] Fetching O4 (DXY 30-day via Yahoo Finance)...
+2026-04-04 23:11:01,689 [RUN_BOT] O4: DXY=100.186 | 30d_change=+2.44% | 10d_change=+0.54%
+2026-04-04 23:11:01,689 [RUN_BOT] O4: available=True | score=0.0 | bias=BEARISH
+2026-04-04 23:11:01,689 [RUN_BOT] Fetching O5 (NFP via FRED PAYEMS)...
+2026-04-04 23:11:02,074 [RUN_BOT] O5: PAYEMS latest=178,000 jobs | prev=-133,000 | data_date=2026-03-01 | days_old=34
+2026-04-04 23:11:02,075 [RUN_BOT] O5: available=True | score=0.5 | bias=NEUTRAL
+2026-04-04 23:11:02,075 [RUN_BOT] Calculating final 2026 outlook...
+2026-04-04 23:11:02,075 [RUN_BOT] Outlook calc: available=4/5 | score=4.5 / max_possible=7.0
+2026-04-04 23:11:02,075 [RUN_BOT] Normalized: 64.3%
+2026-04-04 23:11:02,075 [RUN_BOT] FINAL: BULLISH | Score: 4.5/7.0 | Normalized: 64.3% | Available: 4/5 | Confidence: MEDIUM
+2026-04-04 23:11:02,076 [RUN_BOT] SIGNAL 05 — 2026 GOLD OUTLOOK — END
+2026-04-04 23:11:02,076 [RUN_BOT] Running Signal 06 (Weekly Routine)...
+2026-04-04 23:11:02,085 [RUN_BOT] ============================================================
+2026-04-04 23:11:02,085 [RUN_BOT] SIGNAL 06 — WEEKLY ROUTINE — START
+2026-04-04 23:11:02,085 [RUN_BOT] ============================================================
+2026-04-04 23:11:02,085 [RUN_BOT] Day gate: Saturday (dow=5) | active=False
+2026-04-04 23:11:02,085 [RUN_BOT] Non-trading day — signal inactive
+2026-04-04 23:11:02,085 [RUN_BOT] Running Signal 09 (Volume Confirmation)...
+2026-04-04 23:11:02,090 [RUN_BOT] ============================================================
+2026-04-04 23:11:02,090 [RUN_BOT] SIGNAL 09 — VOLUME CONFIRMATION — START
+2026-04-04 23:11:02,090 [RUN_BOT] ============================================================
+2026-04-04 23:11:02,090 [RUN_BOT] Fetching GOLDBEES OHLCV data...
+2026-04-04 23:11:02,799 [RUN_BOT] Fetched 35 days of GOLDBEES.NS OHLCV data
+2026-04-04 23:11:02,799 [RUN_BOT] Checking V1 (volume level)...
+2026-04-04 23:11:02,799 [RUN_BOT] V1: today_vol=58,520,148 | 20d_avg=73,370,386 | ratio=0.80x
+2026-04-04 23:11:02,799 [RUN_BOT] Checking V2 (volume trend)...
+2026-04-04 23:11:02,799 [RUN_BOT] V2: 5d_vol_trend ratio=0.95 (recent/earlier)
+2026-04-04 23:11:02,799 [RUN_BOT] Checking V3 (price-volume divergence)...
+2026-04-04 23:11:02,799 [RUN_BOT] V3: price_3d=-0.50% | vol_change_3d=-16.13%
+2026-04-04 23:11:02,799 [RUN_BOT] V1=3 V2=1 V3=3 | Total=7/10
+2026-04-04 23:11:02,800 [RUN_BOT] SIGNAL: VOLUME BUY | Score: 7/10 | Confidence: MEDIUM
+2026-04-04 23:11:02,800 [RUN_BOT] SIGNAL 09 — VOLUME CONFIRMATION — END
+2026-04-04 23:11:02,800 [RUN_BOT] Running Signal 10 (MCX-COMEX Spread)...
+2026-04-04 23:11:02,804 [RUN_BOT] ============================================================
+2026-04-04 23:11:02,804 [RUN_BOT] SIGNAL 10 — MCX-COMEX SPREAD — START
+2026-04-04 23:11:02,804 [RUN_BOT] ============================================================
+2026-04-04 23:11:02,804 [RUN_BOT] Fetching COMEX gold price...
+2026-04-04 23:11:03,487 [RUN_BOT] COMEX: $4651.50/oz
+2026-04-04 23:11:03,487 [RUN_BOT] Fetching USD/INR rate...
+2026-04-04 23:11:04,244 [RUN_BOT] USDINR: ₹92.67
+2026-04-04 23:11:04,244 [RUN_BOT] Fetching GOLDBEES price...
+2026-04-04 23:11:05,057 [RUN_BOT] GOLDBEES: ₹120.58/unit → ₹120580.00/10g equiv
+2026-04-04 23:11:05,058 [RUN_BOT] Calculating MCX-COMEX spread...
+2026-04-04 23:11:05,058 [RUN_BOT] COMEX equiv: ₹138587.14/10g | GOLDBEES equiv: ₹120580.00/10g | Premium: -12.99%
+2026-04-04 23:11:05,058 [RUN_BOT] SIGNAL: STRONG BUY — DISCOUNT | Score: 5/5 | Confidence: HIGH
+2026-04-04 23:11:05,058 [RUN_BOT] SIGNAL 10 — MCX-COMEX SPREAD — END
+2026-04-04 23:11:05,058 [RUN_BOT] Running Signal 12 (Correlation Break Alert)...
+2026-04-04 23:11:05,066 [RUN_BOT] ============================================================
+2026-04-04 23:11:05,066 [RUN_BOT] SIGNAL 12 — CORRELATION BREAK ALERT — START
+2026-04-04 23:11:05,066 [RUN_BOT] ============================================================
+2026-04-04 23:11:05,066 [RUN_BOT] Non-trading day — correlations computed but score = 0
+2026-04-04 23:11:05,066 [RUN_BOT] Fetching GOLDBEES (GOLDBEES.NS) — last 60 days...
+2026-04-04 23:11:05,747 [RUN_BOT]   GOLDBEES: 60 rows  2026-04-02  last=120.5800
+2026-04-04 23:11:05,747 [RUN_BOT] Fetching COMEX (GC=F) — last 60 days...
+2026-04-04 23:11:05,989 [RUN_BOT]   COMEX: 50 rows  2026-04-02  last=4651.5000
+2026-04-04 23:11:05,990 [RUN_BOT] Fetching DXY (DX-Y.NYB) — last 60 days...
+2026-04-04 23:11:06,231 [RUN_BOT]   DXY: 51 rows  2026-04-03  last=100.1860
+2026-04-04 23:11:06,232 [RUN_BOT] Fetching USDINR (USDINR=X) — last 60 days...
+2026-04-04 23:11:06,485 [RUN_BOT]   USDINR: 61 rows  2026-04-04  last=92.6700
+2026-04-04 23:11:06,486 [RUN_BOT] Fetching NIFTY50 (^NSEI) — last 60 days...
+2026-04-04 23:11:06,790 [RUN_BOT]   NIFTY50: 59 rows  2026-04-02  last=22713.0996
+2026-04-04 23:11:06,790 [RUN_BOT] Data availability: {'goldbees': True, 'comex': True, 'dxy': True, 'usdinr': True, 'nifty': True}
+2026-04-04 23:11:06,790 [RUN_BOT] 5d changes — GOLDBEES:4.407 COMEX:6.308 DXY:0.036 USDINR:-2.228 NIFTY:-0.87
+2026-04-04 23:11:06,798 [RUN_BOT]   GOLDBEES-COMEX: 20d=0.663  10d=None
+2026-04-04 23:11:06,801 [RUN_BOT]   GOLDBEES-DXY: 20d=0.547  10d=None
+2026-04-04 23:11:06,804 [RUN_BOT]   GOLDBEES-USDINR: 20d=-0.286  10d=None
+2026-04-04 23:11:06,806 [RUN_BOT]   GOLDBEES-NIFTY: 20d=0.557  10d=None
+2026-04-04 23:11:06,806 [RUN_BOT] Breaks: 4 | Category: MULTI_BULLISH | Score: 0.0 | Regime: NON-TRADING DAY
+2026-04-04 23:11:06,806 [RUN_BOT]   ALERT B: ARBITRAGE WINDOW
+2026-04-04 23:11:06,806 [RUN_BOT]   ALERT C: LIQUIDITY TRAP
+2026-04-04 23:11:06,806 [RUN_BOT]   ALERT E: SILENT BULL
+2026-04-04 23:11:06,806 [RUN_BOT] SIGNAL 12 — CORRELATION BREAK ALERT — END
+2026-04-04 23:11:06,806 [RUN_BOT] Scores: S01=5.0 S02=22.0 S03=5.0 S04=0.0 S05=7.0 S06=0 S09=7.0 S10=5.0 S12=0.0
+2026-04-04 23:11:06,806 [RUN_BOT] Raw=51.0 | S07 penalty=0.0 | Final=51.0
+2026-04-04 23:11:06,806 [RUN_BOT] Non-trading day: score capped at 20
+2026-04-04 23:11:06,807 [RUN_BOT] FINAL VERDICT: NON-TRADING DAY | Score: 20.0/95 | Confidence: NONE
+2026-04-04 23:11:06,807 [RUN_BOT] SIGNAL 08 — FINAL VERDICT — END
+2026-04-04 23:11:06,807 [RUN_BOT] Telegram dispatch: signal=NON-TRADING DAY
+2026-04-04 23:11:06,807 [RUN_BOT] Telegram: no verdict alert sent for 'NON-TRADING DAY' (silent verdict)
+2026-04-04 23:11:06,807 [RUN_BOT] Telegram: bot token not configured in config.py — alert skipped
+2026-04-04 23:11:06,807 [RUN_BOT] Telegram S12 compound break alert sent: False (3 alert type(s))
+2026-04-04 23:11:06,807 [RUN_BOT] Telegram alert dispatched: False
+2026-04-04 23:11:06,813 [RUN_BOT] Dashboard written → /Users/nathiya/Documents/my app/goldMetalStocks/gold_bot/./dashboard.html
+2026-04-04 23:11:06,813 [RUN_BOT] --dry-run: run history not saved
+2026-04-04 23:11:07,012 [RUN_BOT] Dashboard opened in default browser
+2026-04-04 23:11:07,012 [RUN_BOT] BOT RUN — END  (15.5s)
